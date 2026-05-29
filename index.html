@@ -347,13 +347,7 @@ async function loadData() {
   try {
     const r = await fetch(FIREBASE_URL + '/data.json');
     const d = await r.json();
-    if (d) {
-      db = d;
-      if (!db.clients) db.clients = [];
-      if (!db.txs) db.txs = [];
-      if (!db.nextClientId) db.nextClientId = 1;
-      if (!db.nextTxId) db.nextTxId = 1;
-    }
+    if (d) { db = d; if (!db.clients) db.clients = []; if (!db.txs) db.txs = []; if (!db.nextClientId) db.nextClientId = 1; if (!db.nextTxId) db.nextTxId = 1; }
     setSyncStatus('ok', 'Synchronisé — ' + new Date().toLocaleTimeString('fr-CA', {hour:'2-digit',minute:'2-digit'}));
   } catch(e) {
     setSyncStatus('err', 'Erreur de connexion');
@@ -386,7 +380,7 @@ function fmt(n) {
 }
 function today() { return new Date().toISOString().split('T')[0]; }
 function getClient(id) { return db.clients.find(c => c.id === id); }
-function getClientByName(name) { return db.clients.find(c => c.nom.toLowerCase() === name.toLowerCase()); }
+function getClientByName(name) { return db.clients.find(c => (c.nom||'').toLowerCase() === name.toLowerCase()); }
 function getClientByTel(tel) {
   const clean = tel.replace(/\D/g,'');
   if (clean.length < 7) return null;
@@ -569,7 +563,7 @@ function renderClients() {
   if (q) {
     const numQ = parseInt(q);
     list = list.filter(c =>
-      c.nom.toLowerCase().includes(q) ||
+      (c.nom||'').toLowerCase().includes(q) ||
       (!isNaN(numQ) && c.id === numQ) ||
       (c.tel && c.tel.replace(/\D/g,'').includes(q.replace(/\D/g,'')))
     );
