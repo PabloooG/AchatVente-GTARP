@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Registre — Achats & Ventes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0a0f;
+  --bg2: #111118;
+  --bg3: #18181f;
+  --bg4: #1e1e28;
+  --border: rgba(255,255,255,0.07);
+  --border2: rgba(255,255,255,0.13);
+  --text: #f0f0f5;
+  --text2: #8888a0;
+  --text3: #55556a;
+  --green: #00e5a0;
+  --green-dim: rgba(0,229,160,0.12);
+  --green-border: rgba(0,229,160,0.25);
+  --red: #ff5566;
+  --red-dim: rgba(255,85,102,0.12);
+  --red-border: rgba(255,85,102,0.25);
+  --accent: #7c6fff;
+  --accent-dim: rgba(124,111,255,0.12);
+  --accent-border: rgba(124,111,255,0.3);
+  --mono: 'Space Mono', monospace;
+  --sans: 'DM Sans', sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh;font-size:15px}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0}
+.app{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:2rem 1.5rem}
+
+/* Header */
+.header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:2.5rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border)}
+.logo{display:flex;flex-direction:column;gap:4px}
+.logo-title{font-family:var(--mono);font-size:22px;font-weight:700;letter-spacing:-0.5px;color:var(--text)}
+.logo-title span{color:var(--green)}
+.logo-sub{font-size:12px;color:var(--text3);letter-spacing:0.06em;text-transform:uppercase}
+.sync-pill{display:flex;align-items:center;gap:7px;background:var(--bg3);border:1px solid var(--border2);border-radius:99px;padding:6px 14px;font-size:12px;color:var(--text2);font-family:var(--mono)}
+.sync-dot{width:7px;height:7px;border-radius:50%;background:var(--green);flex-shrink:0}
+.sync-dot.syncing{background:#ffaa00;animation:blink 0.8s infinite}
+.sync-dot.err{background:var(--red)}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+
+/* Metrics */
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:2rem}
+.metric{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:16px 18px;position:relative;overflow:hidden;transition:border-color 0.2s}
+.metric:hover{border-color:var(--border2)}
+.metric::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.metric.m-green::before{background:var(--green)}
+.metric.m-red::before{background:var(--red)}
+.metric.m-purple::before{background:var(--accent)}
+.metric-label{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:8px;font-family:var(--mono)}
+.metric-value{font-size:22px;font-weight:600;font-family:var(--mono)}
+.metric-value.green{color:var(--green)}
+.metric-value.red{color:var(--red)}
+.metric-value.purple{color:var(--accent)}
+
+/* Entry bar */
+.entry-wrap{background:var(--bg2);border:1px solid var(--border2);border-radius:14px;padding:18px 20px;margin-bottom:2rem;transition:border-color 0.2s}
+.entry-wrap:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-dim)}
+.entry-hint{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:14px;font-family:var(--mono);display:flex;align-items:center;gap:6px}
+.entry-hint::before{content:'→';color:var(--green)}
+
+/* Two-row grid */
+.entry-row{display:grid;gap:8px;align-items:end}
+.entry-row-1{grid-template-columns:1fr 1fr auto;margin-bottom:10px}
+.entry-row-2{grid-template-columns:100px 1fr 90px 110px auto}
+.entry-sep{height:1px;background:var(--border);margin:12px 0}
+
+.entry-field{display:flex;flex-direction:column;gap:5px}
+.entry-label{font-size:10px;color:var(--text3);font-family:var(--mono);text-transform:uppercase;letter-spacing:0.07em}
+.entry-label span{color:var(--text3);opacity:0.6;font-size:9px;text-transform:none;letter-spacing:0}
+
+.entry-wrap input,.entry-wrap select{
+  background:var(--bg3);border:1px solid var(--border2);color:var(--text);
+  font-family:var(--sans);font-size:14px;padding:8px 12px;height:38px;width:100%;
+  border-radius:8px;outline:none;transition:border-color 0.15s,background 0.15s
+}
+.entry-wrap input:focus,.entry-wrap select:focus{border-color:var(--accent);background:var(--bg4)}
+.entry-wrap input::placeholder{color:var(--text3)}
+.entry-wrap select option{background:var(--bg3);color:var(--text)}
+
+/* Match hint sous les champs client */
+.match-row{display:grid;gap:8px;grid-template-columns:1fr 1fr auto;margin-top:5px}
+.client-match-hint{font-size:10px;font-family:var(--mono);min-height:14px;transition:color 0.2s;grid-column:1/-1}
+.client-match-hint.found{color:var(--green)}
+.client-match-hint.new{color:var(--accent)}
+
+.btn-submit{height:38px;padding:0 22px;background:var(--green);color:#000;border:none;border-radius:8px;font-family:var(--mono);font-size:13px;font-weight:700;cursor:pointer;letter-spacing:0.03em;transition:opacity 0.15s,transform 0.1s;white-space:nowrap;align-self:end}
+.btn-submit:hover{opacity:0.85}
+.btn-submit:active{transform:scale(0.96)}
+.err{font-size:12px;color:var(--red);margin-top:8px;min-height:16px;font-family:var(--mono)}
+
+/* Tabs */
+.tabs{display:flex;gap:2px;margin-bottom:1.5rem;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:4px;width:fit-content}
+.tab{padding:7px 18px;font-size:13px;border:none;background:none;color:var(--text2);border-radius:7px;cursor:pointer;font-family:var(--sans);font-weight:500;transition:all 0.15s}
+.tab.active{background:var(--bg4);color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,0.4)}
+.tab:hover:not(.active){color:var(--text)}
+
+/* Section */
+.section{display:none}
+.section.active{display:block}
+
+/* Table */
+.tbl-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:12px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead th{padding:10px 14px;text-align:left;color:var(--text3);font-weight:500;font-size:11px;text-transform:uppercase;letter-spacing:0.06em;border-bottom:1px solid var(--border);background:var(--bg2);font-family:var(--mono);white-space:nowrap}
+tbody tr{border-bottom:1px solid var(--border);animation:rowIn 0.2s ease}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:var(--bg2)}
+td{padding:10px 14px;vertical-align:middle}
+@keyframes rowIn{from{opacity:0;transform:translateX(-6px)}to{opacity:1;transform:translateX(0)}}
+
+.badge{display:inline-block;font-size:11px;padding:3px 9px;border-radius:99px;font-weight:700;font-family:var(--mono);letter-spacing:0.03em}
+.badge-v{background:var(--green-dim);color:var(--green);border:1px solid var(--green-border)}
+.badge-a{background:var(--red-dim);color:var(--red);border:1px solid var(--red-border)}
+.pos{color:var(--green);font-family:var(--mono);font-size:13px}
+.neg{color:var(--red);font-family:var(--mono);font-size:13px}
+.mono{font-family:var(--mono);font-size:12px}
+.btn-del{background:none;border:1px solid transparent;cursor:pointer;color:var(--text3);font-size:14px;padding:4px 7px;border-radius:6px;transition:all 0.15s}
+.btn-del:hover{color:var(--red);border-color:var(--red-border);background:var(--red-dim)}
+.btn-edit{background:none;border:1px solid transparent;cursor:pointer;color:var(--text3);font-size:13px;padding:4px 7px;border-radius:6px;transition:all 0.15s}
+.btn-edit:hover{color:var(--accent);border-color:var(--accent-border);background:var(--accent-dim)}
+.empty-row td{text-align:center;padding:3rem;color:var(--text3);font-size:13px;font-family:var(--mono)}
+
+/* Client section toolbar */
+.clients-toolbar{display:flex;gap:10px;align-items:center;margin-bottom:14px;flex-wrap:wrap}
+.search-input{background:var(--bg3);border:1px solid var(--border2);color:var(--text);font-family:var(--sans);font-size:13px;padding:7px 12px;height:34px;border-radius:8px;outline:none;transition:border-color 0.15s,background 0.15s;width:220px}
+.search-input:focus{border-color:var(--accent);background:var(--bg4)}
+.search-input::placeholder{color:var(--text3)}
+.btn-add-client{height:34px;padding:0 16px;background:var(--accent-dim);color:var(--accent);border:1px solid var(--accent-border);border-radius:8px;font-family:var(--mono);font-size:12px;font-weight:700;cursor:pointer;transition:all 0.15s;white-space:nowrap}
+.btn-add-client:hover{background:var(--accent);color:#fff}
+
+/* Client cards */
+.clients-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+.client-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:16px 18px;transition:border-color 0.2s,transform 0.15s;position:relative}
+.client-card:hover{border-color:var(--border2);transform:translateY(-1px)}
+.client-card-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:2px}
+.client-card-name{font-size:15px;font-weight:600}
+.client-card-id{font-family:var(--mono);font-size:10px;color:var(--text3);background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:2px 6px;margin-top:2px}
+.client-card-tel{font-size:12px;color:var(--text3);font-family:var(--mono);margin-bottom:12px;margin-top:3px}
+.client-divider{height:1px;background:var(--border);margin-bottom:12px}
+.client-stat{display:flex;justify-content:space-between;align-items:center;font-size:12px;margin-bottom:5px}
+.client-stat-label{color:var(--text3);text-transform:uppercase;letter-spacing:0.05em;font-family:var(--mono);font-size:10px}
+.client-net{display:flex;justify-content:space-between;align-items:center;margin-top:10px;padding-top:10px;border-top:1px solid var(--border)}
+.client-net-label{font-size:11px;font-family:var(--mono);color:var(--text3);text-transform:uppercase;letter-spacing:0.05em}
+.client-actions{display:flex;gap:4px;margin-top:10px}
+
+/* Section title */
+.sec-title{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:var(--text3);margin-bottom:12px}
+
+/* Modal */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:100;display:flex;align-items:center;justify-content:center;padding:1rem;opacity:0;pointer-events:none;transition:opacity 0.2s}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal{background:var(--bg2);border:1px solid var(--border2);border-radius:16px;padding:24px;width:100%;max-width:400px;transform:scale(0.95);transition:transform 0.2s}
+.modal-overlay.open .modal{transform:scale(1)}
+.modal-title{font-family:var(--mono);font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:18px;color:var(--text)}
+.modal-field{display:flex;flex-direction:column;gap:5px;margin-bottom:14px}
+.modal-label{font-size:11px;color:var(--text3);font-family:var(--mono);text-transform:uppercase;letter-spacing:0.06em}
+.modal-input{background:var(--bg3);border:1px solid var(--border2);color:var(--text);font-family:var(--sans);font-size:14px;padding:9px 12px;border-radius:8px;outline:none;transition:border-color 0.15s}
+.modal-input:focus{border-color:var(--accent)}
+.modal-actions{display:flex;gap:8px;margin-top:6px}
+.btn-save{flex:1;height:38px;background:var(--green);color:#000;border:none;border-radius:8px;font-family:var(--mono);font-size:13px;font-weight:700;cursor:pointer;transition:opacity 0.15s}
+.btn-save:hover{opacity:0.85}
+.btn-cancel{height:38px;padding:0 18px;background:var(--bg3);color:var(--text2);border:1px solid var(--border2);border-radius:8px;font-family:var(--mono);font-size:12px;cursor:pointer;transition:all 0.15s}
+.btn-cancel:hover{color:var(--text);border-color:var(--border2)}
+.modal-del-zone{margin-top:14px;padding-top:14px;border-top:1px solid var(--border)}
+.btn-del-client{width:100%;height:34px;background:var(--red-dim);color:var(--red);border:1px solid var(--red-border);border-radius:8px;font-family:var(--mono);font-size:12px;font-weight:700;cursor:pointer;transition:all 0.15s}
+.btn-del-client:hover{background:var(--red);color:#fff}
+
+/* Counter badge in metric */
+.metric-sub{font-size:11px;color:var(--text3);font-family:var(--mono);margin-top:4px}
+
+/* Toast */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--bg3);border:1px solid var(--green-border);color:var(--green);padding:10px 22px;border-radius:99px;font-size:13px;font-family:var(--mono);opacity:0;transition:all 0.25s;pointer-events:none;z-index:999;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="header">
+    <div class="logo">
+      <div class="logo-title">REG<span>/</span>TX</div>
+      <div class="logo-sub">Registre achats & ventes</div>
+    </div>
+    <div class="sync-pill">
+      <div class="sync-dot" id="sync-dot"></div>
+      <span id="sync-label">Chargement…</span>
+    </div>
+  </div>
+
+  <!-- Saisie rapide -->
+  <div class="entry-wrap">
+    <div class="entry-hint">Saisie rapide</div>
+
+    <!-- Rangée 1 : Identité client -->
+    <div class="entry-row entry-row-1">
+      <div class="entry-field">
+        <label class="entry-label">Nom <span>(optionnel)</span></label>
+        <input id="f-nom" placeholder="Ex: Jean Bolduc" list="client-list-nom" autocomplete="off" oninput="onClientInput()">
+        <datalist id="client-list-nom"></datalist>
+      </div>
+      <div class="entry-field">
+        <label class="entry-label">Téléphone <span>(optionnel)</span></label>
+        <input id="f-tel" placeholder="Ex: 418-555-0101" autocomplete="off" oninput="onClientInput()">
+      </div>
+      <div style="align-self:end;padding-bottom:0">
+        <!-- spacer to align with row 2 button -->
+      </div>
+    </div>
+    <div class="client-match-hint" id="client-match-hint"></div>
+
+    <div class="entry-sep"></div>
+
+    <!-- Rangée 2 : Transaction -->
+    <div class="entry-row entry-row-2">
+      <div class="entry-field">
+        <label class="entry-label">Type</label>
+        <select id="f-type">
+          <option value="Vente">Vente</option>
+          <option value="Achat">Achat</option>
+        </select>
+      </div>
+      <div class="entry-field">
+        <label class="entry-label">Description <span>(optionnel)</span></label>
+        <input id="f-desc" placeholder="Ex: Bois de 2x4">
+      </div>
+      <div class="entry-field">
+        <label class="entry-label">CB / Unités</label>
+        <input id="f-units" type="number" min="0" placeholder="0">
+      </div>
+      <div class="entry-field">
+        <label class="entry-label">Prix unitaire $</label>
+        <input id="f-prix" type="number" min="0" step="0.01" placeholder="0.00">
+      </div>
+      <button class="btn-submit" onclick="addTx()">+ AJOUTER</button>
+    </div>
+
+    <div class="err" id="err-msg"></div>
+  </div>
+
+  <div class="metrics" id="metrics"></div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="showTab('transactions')">Transactions</button>
+    <button class="tab" onclick="showTab('clients')">Clients</button>
+  </div>
+
+  <!-- Transactions -->
+  <div class="section active" id="tab-transactions">
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th><th>Type</th><th>Client</th><th>Description</th>
+            <th style="text-align:right">Unités</th>
+            <th style="text-align:right">Montant</th>
+            <th style="text-align:right">Profit/Perte</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="tx-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Clients -->
+  <div class="section" id="tab-clients">
+    <div class="clients-toolbar">
+      <input class="search-input" id="client-search" placeholder="🔍  Rechercher par nom ou numéro…" oninput="renderClients()">
+      <button class="btn-add-client" onclick="openAddClientModal()">+ Nouveau client</button>
+    </div>
+    <div class="clients-grid" id="clients-grid"></div>
+  </div>
+
+</div>
+
+<!-- Modal client -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModalIfOutside(event)">
+  <div class="modal">
+    <div class="modal-title" id="modal-title">Nouveau client</div>
+    <div class="modal-field">
+      <div class="modal-label">Nom</div>
+      <input class="modal-input" id="modal-nom" placeholder="Nom du client">
+    </div>
+    <div class="modal-field">
+      <div class="modal-label">Téléphone <span style="color:var(--text3);font-size:10px">(optionnel)</span></div>
+      <input class="modal-input" id="modal-tel" placeholder="Ex: 418-555-0101">
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal()">Annuler</button>
+      <button class="btn-save" id="modal-save-btn" onclick="saveClientModal()">Enregistrer</button>
+    </div>
+    <div class="modal-del-zone" id="modal-del-zone" style="display:none">
+      <button class="btn-del-client" onclick="deleteClientFromModal()">🗑  Supprimer ce client</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ── Firebase config ──────────────────────────────────────────────────────────
+const FIREBASE_URL = "https://gtarp-achatsvente-default-rtdb.firebaseio.com";
+const USE_FIREBASE = true;
+
+let db = {
+  clients: [
+    {id:1, nom:"Jean Bolduc",  tel:"418-555-0101"},
+    {id:2, nom:"Marie Gagnon", tel:"418-555-0202"},
+    {id:3, nom:"Robert Côté",  tel:"418-555-0303"},
+  ],
+  txs: [
+    {id:1, date:"2026-05-01", client:1, type:"Achat", desc:"Bois de 2x4",        units:50,  montant:250},
+    {id:2, date:"2026-05-03", client:2, type:"Vente", desc:"Planches épinette",   units:30,  montant:390},
+    {id:3, date:"2026-05-10", client:1, type:"Vente", desc:"Bois traité",         units:20,  montant:310},
+  ],
+  nextTxId: 4,
+  nextClientId: 4
+};
+
+let modalClientId = null; // null = nouveau, sinon ID du client en édition
+
+// ── Sync ─────────────────────────────────────────────────────────────────────
+function setSyncStatus(state, msg) {
+  const dot = document.getElementById('sync-dot');
+  const lbl = document.getElementById('sync-label');
+  dot.className = 'sync-dot' + (state==='syncing'?' syncing':state==='err'?' err':'');
+  lbl.textContent = msg;
+}
+
+async function loadData() {
+  if (!USE_FIREBASE) {
+    const saved = localStorage.getItem('regtx-v3');
+    if (saved) db = JSON.parse(saved);
+    setSyncStatus('ok', 'Local — configure Firebase pour partager');
+    renderAll();
+    return;
+  }
+  setSyncStatus('syncing', 'Synchronisation…');
+  try {
+    const r = await fetch(FIREBASE_URL + '/data.json');
+    const d = await r.json();
+    if (d) db = d;
+    setSyncStatus('ok', 'Synchronisé — ' + new Date().toLocaleTimeString('fr-CA', {hour:'2-digit',minute:'2-digit'}));
+  } catch(e) {
+    setSyncStatus('err', 'Erreur de connexion');
+  }
+  renderAll();
+}
+
+async function saveData() {
+  if (!USE_FIREBASE) {
+    localStorage.setItem('regtx-v3', JSON.stringify(db));
+    setSyncStatus('ok', 'Sauvegardé localement');
+    return;
+  }
+  setSyncStatus('syncing', 'Enregistrement…');
+  try {
+    await fetch(FIREBASE_URL + '/data.json', {
+      method: 'PUT',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify(db)
+    });
+    setSyncStatus('ok', 'Synchronisé — ' + new Date().toLocaleTimeString('fr-CA', {hour:'2-digit',minute:'2-digit'}));
+  } catch(e) {
+    setSyncStatus('err', 'Erreur de sauvegarde');
+  }
+}
+
+// ── Helpers ──────────────────────────────────────────────────────────────────
+function fmt(n) {
+  return (n < 0 ? '-' : '') + Math.abs(n).toLocaleString('fr-CA', {style:'currency',currency:'CAD',minimumFractionDigits:2});
+}
+function today() { return new Date().toISOString().split('T')[0]; }
+function getClient(id) { return db.clients.find(c => c.id === id); }
+function getClientByName(name) { return db.clients.find(c => c.nom.toLowerCase() === name.toLowerCase()); }
+function getClientByTel(tel) {
+  const clean = tel.replace(/\D/g,'');
+  if (clean.length < 7) return null;
+  return db.clients.find(c => c.tel && c.tel.replace(/\D/g,'') === clean);
+}
+
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+// ── Client-match hint dans saisie rapide ──────────────────────────────────────
+function onClientInput() {
+  const nom = document.getElementById('f-nom').value.trim();
+  const tel = document.getElementById('f-tel').value.trim();
+  const hint = document.getElementById('client-match-hint');
+  if (!nom && !tel) { hint.textContent = ''; hint.className = 'client-match-hint'; return; }
+
+  const found = resolveClient(nom, tel);
+  if (found) {
+    const label = found.nom || found.tel || '#' + found.id;
+    const extra = found.nom && found.tel ? found.nom + ' · ' + found.tel : (found.nom || found.tel);
+    hint.textContent = '✓ Client existant : ' + extra;
+    hint.className = 'client-match-hint found';
+  } else {
+    const parts = [];
+    if (nom) parts.push(nom);
+    if (tel) parts.push(tel);
+    hint.textContent = '+ Nouveau client : ' + parts.join(' · ');
+    hint.className = 'client-match-hint new';
+  }
+}
+
+// Résolution : téléphone prioritaire, puis nom
+// Retourne le client trouvé, ou null si nouveau
+function resolveClient(nom, tel) {
+  if (tel) {
+    const byTel = getClientByTel(tel);
+    if (byTel) return byTel;
+  }
+  if (nom) {
+    const byName = getClientByName(nom);
+    if (byName) return byName;
+  }
+  return null;
+}
+
+// ── Add transaction ───────────────────────────────────────────────────────────
+function addTx() {
+  const nom     = document.getElementById('f-nom').value.trim();
+  const tel     = document.getElementById('f-tel').value.trim();
+  const type    = document.getElementById('f-type').value;
+  const desc    = document.getElementById('f-desc').value.trim();
+  const units   = parseFloat(document.getElementById('f-units').value) || null;
+  const prix    = parseFloat(document.getElementById('f-prix').value);
+  const err     = document.getElementById('err-msg');
+
+  if (!nom && !tel) { err.textContent = '! Entre au moins un nom ou un numéro de téléphone.'; return; }
+  if (!prix || prix <= 0) { err.textContent = '! Entre un prix unitaire valide ($).'; return; }
+  err.textContent = '';
+
+  const montant = Math.round((units || 1) * prix * 100) / 100;
+
+  // Résolution : téléphone prioritaire
+  let existing = resolveClient(nom, tel);
+  let clientId;
+
+  if (existing) {
+    clientId = existing.id;
+    // Enrichir le client existant si on a de nouvelles infos
+    if (nom && !existing.nom) existing.nom = nom;
+    if (tel && !existing.tel) existing.tel = tel;
+  } else {
+    // Nouveau client
+    db.clients.push({ id: db.nextClientId, nom: nom || '', tel: tel || '' });
+    clientId = db.nextClientId++;
+  }
+
+  db.txs.unshift({ id: db.nextTxId++, date: today(), client: clientId, type, desc, units, montant });
+  saveData();
+  updateDatalist();
+  renderAll();
+
+  document.getElementById('f-nom').value = '';
+  document.getElementById('f-tel').value = '';
+  document.getElementById('f-desc').value = '';
+  document.getElementById('f-units').value = '';
+  document.getElementById('f-prix').value = '';
+  document.getElementById('client-match-hint').textContent = '';
+  document.getElementById('client-match-hint').className = 'client-match-hint';
+  document.getElementById('f-nom').focus();
+  toast('Transaction ajoutée !');
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && document.activeElement.id === 'f-montant') addTx();
+  if (e.key === 'Escape') closeModal();
+});
+
+function deleteTx(id) {
+  if (!confirm('Supprimer cette transaction ?')) return;
+  db.txs = db.txs.filter(t => t.id !== id);
+  saveData();
+  renderAll();
+}
+
+// ── Datalist ─────────────────────────────────────────────────────────────────
+function updateDatalist() {
+  const dl = document.getElementById('client-list-nom');
+  if (!dl) return;
+  // Une seule option par client : value = nom (pour l'autocomplete),
+  // label = "Nom · Téléphone" affiché dans la liste
+  dl.innerHTML = db.clients.map(c => {
+    const val   = c.nom || c.tel || '';
+    const label = [c.nom, c.tel].filter(Boolean).join(' · ');
+    return `<option value="${val}">${label}</option>`;
+  }).join('');
+}
+
+// ── Tabs ─────────────────────────────────────────────────────────────────────
+function showTab(name) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  [...document.querySelectorAll('.tab')].find(t =>
+    t.textContent.toLowerCase().includes(name === 'transactions' ? 'trans' : 'client')
+  ).classList.add('active');
+}
+
+// ── Render metrics ────────────────────────────────────────────────────────────
+function renderMetrics() {
+  const tv = db.txs.filter(t=>t.type==='Vente').reduce((s,t)=>s+t.montant,0);
+  const ta = db.txs.filter(t=>t.type==='Achat').reduce((s,t)=>s+t.montant,0);
+  const net = tv - ta;
+  const uv = db.txs.filter(t=>t.type==='Vente').reduce((s,t)=>s+(t.units||0),0);
+  const ua = db.txs.filter(t=>t.type==='Achat').reduce((s,t)=>s+(t.units||0),0);
+  const nbClients = db.clients.length;
+  document.getElementById('metrics').innerHTML = `
+    <div class="metric m-green"><div class="metric-label">Ventes</div><div class="metric-value green">${fmt(tv)}</div></div>
+    <div class="metric m-red"><div class="metric-label">Achats</div><div class="metric-value red">${fmt(ta)}</div></div>
+    <div class="metric m-purple"><div class="metric-label">Profit / Perte net</div><div class="metric-value ${net>=0?'green':'red'}">${fmt(net)}</div></div>
+    <div class="metric"><div class="metric-label">Unités vendues</div><div class="metric-value purple">${uv.toLocaleString('fr-CA')}</div></div>
+    <div class="metric"><div class="metric-label">Unités achetées</div><div class="metric-value purple">${ua.toLocaleString('fr-CA')}</div></div>
+    <div class="metric"><div class="metric-label">Clients actifs</div><div class="metric-value" style="color:var(--text)">${nbClients}</div><div class="metric-sub">${db.txs.length} transaction${db.txs.length!==1?'s':''}</div></div>
+  `;
+}
+
+// ── Render transactions ───────────────────────────────────────────────────────
+function renderTxs() {
+  const body = document.getElementById('tx-body');
+  if (!db.txs.length) {
+    body.innerHTML = '<tr class="empty-row"><td colspan="8">Aucune transaction enregistrée</td></tr>';
+    return;
+  }
+  body.innerHTML = db.txs.map(t => {
+    const c = getClient(t.client);
+    const pl = t.type==='Vente' ? t.montant : -t.montant;
+    const dateStr = t.date ? new Date(t.date+'T12:00').toLocaleDateString('fr-CA',{day:'2-digit',month:'2-digit',year:'2-digit'}) : '';
+    return `<tr>
+      <td class="mono" style="color:var(--text3)">${dateStr}</td>
+      <td><span class="badge ${t.type==='Vente'?'badge-v':'badge-a'}">${t.type.toUpperCase()}</span></td>
+      <td style="font-weight:500">${c ? (c.nom || c.tel || '—') : '—'}</td>
+      <td style="color:var(--text2);font-size:13px">${t.desc||'—'}</td>
+      <td style="text-align:right" class="mono">${t.units!=null?t.units.toLocaleString('fr-CA'):'—'}</td>
+      <td style="text-align:right;font-weight:600" class="mono">${fmt(t.montant)}</td>
+      <td style="text-align:right" class="${pl>=0?'pos':'neg'}">${fmt(pl)}</td>
+      <td style="text-align:center"><button class="btn-del" onclick="deleteTx(${t.id})" title="Supprimer">✕</button></td>
+    </tr>`;
+  }).join('');
+}
+
+// ── Render clients ────────────────────────────────────────────────────────────
+function renderClients() {
+  const grid = document.getElementById('clients-grid');
+  const q = (document.getElementById('client-search')?.value || '').trim().toLowerCase();
+
+  let list = db.clients;
+  if (q) {
+    const numQ = parseInt(q);
+    list = list.filter(c =>
+      c.nom.toLowerCase().includes(q) ||
+      (!isNaN(numQ) && c.id === numQ) ||
+      (c.tel && c.tel.replace(/\D/g,'').includes(q.replace(/\D/g,'')))
+    );
+  }
+
+  if (!list.length) {
+    grid.innerHTML = `<p style="color:var(--text3);font-size:13px;font-family:var(--mono)">${q ? 'Aucun résultat pour "'+q+'"' : 'Aucun client.'}</p>`;
+    return;
+  }
+
+  grid.innerHTML = list.map(c => {
+    const txs = db.txs.filter(t => t.client === c.id);
+    const tv = txs.filter(t=>t.type==='Vente').reduce((s,t)=>s+t.montant,0);
+    const ta = txs.filter(t=>t.type==='Achat').reduce((s,t)=>s+t.montant,0);
+    const uv = txs.filter(t=>t.type==='Vente').reduce((s,t)=>s+(t.units||0),0);
+    const ua = txs.filter(t=>t.type==='Achat').reduce((s,t)=>s+(t.units||0),0);
+    const net = tv - ta;
+    const displayName = c.nom || c.tel || '—';
+    const displaySub  = c.nom && c.tel ? c.tel : (c.nom ? '' : '');
+    return `<div class="client-card">
+      <div class="client-card-header">
+        <div class="client-card-name">${displayName}</div>
+        <div class="client-card-id">#${c.id}</div>
+      </div>
+      ${displaySub ? `<div class="client-card-tel">${displaySub}</div>` : `<div style="height:6px"></div>`}
+      <div class="client-divider"></div>
+      ${tv>0?`<div class="client-stat"><span class="client-stat-label">Ventes</span><span class="pos">${fmt(tv)}</span></div>`:''}
+      ${ta>0?`<div class="client-stat"><span class="client-stat-label">Achats</span><span class="neg">${fmt(ta)}</span></div>`:''}
+      ${uv>0?`<div class="client-stat"><span class="client-stat-label">Unités vendues</span><span class="mono">${uv.toLocaleString('fr-CA')}</span></div>`:''}
+      ${ua>0?`<div class="client-stat"><span class="client-stat-label">Unités achetées</span><span class="mono">${ua.toLocaleString('fr-CA')}</span></div>`:''}
+      <div class="client-net">
+        <span class="client-net-label">NET</span>
+        <span class="mono" style="font-size:14px;font-weight:700;color:${net>=0?'var(--green)':'var(--red)'}">${fmt(net)}</span>
+      </div>
+      <div style="margin-top:8px;font-size:11px;color:var(--text3);font-family:var(--mono)">${txs.length} transaction${txs.length!==1?'s':''}</div>
+      <div class="client-actions">
+        <button class="btn-edit" style="flex:1;font-family:var(--mono);font-size:11px" onclick="openEditClientModal(${c.id})">✎ Modifier</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderAll() {
+  renderMetrics();
+  renderTxs();
+  renderClients();
+  updateDatalist();
+}
+
+// ── Modal client ──────────────────────────────────────────────────────────────
+function openAddClientModal() {
+  modalClientId = null;
+  document.getElementById('modal-title').textContent = 'Nouveau client';
+  document.getElementById('modal-nom').value = '';
+  document.getElementById('modal-tel').value = '';
+  document.getElementById('modal-del-zone').style.display = 'none';
+  document.getElementById('modal-overlay').classList.add('open');
+  setTimeout(() => document.getElementById('modal-nom').focus(), 100);
+}
+
+function openEditClientModal(id) {
+  const c = getClient(id);
+  if (!c) return;
+  modalClientId = id;
+  document.getElementById('modal-title').textContent = 'Modifier client #' + id;
+  document.getElementById('modal-nom').value = c.nom;
+  document.getElementById('modal-tel').value = c.tel || '';
+  document.getElementById('modal-del-zone').style.display = 'block';
+  document.getElementById('modal-overlay').classList.add('open');
+  setTimeout(() => document.getElementById('modal-nom').focus(), 100);
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+}
+
+function closeModalIfOutside(e) {
+  if (e.target === document.getElementById('modal-overlay')) closeModal();
+}
+
+function saveClientModal() {
+  const nom = document.getElementById('modal-nom').value.trim();
+  const tel = document.getElementById('modal-tel').value.trim();
+  if (!nom && !tel) {
+    document.getElementById('modal-nom').focus();
+    return;
+  }
+
+  if (modalClientId === null) {
+    db.clients.push({ id: db.nextClientId, nom: nom || '', tel: tel || '' });
+    db.nextClientId++;
+    toast('Client ajouté !');
+  } else {
+    const c = getClient(modalClientId);
+    if (c) { c.nom = nom || ''; c.tel = tel || ''; }
+    toast('Client mis à jour !');
+  }
+  saveData();
+  renderAll();
+  closeModal();
+}
+
+function deleteClientFromModal() {
+  if (!modalClientId) return;
+  const c = getClient(modalClientId);
+  if (!c) return;
+  const txCount = db.txs.filter(t => t.client === modalClientId).length;
+  const msg = txCount > 0
+    ? `Supprimer "${c.nom}" ? Ce client a ${txCount} transaction${txCount>1?'s':''} — elles seront conservées mais sans client associé.`
+    : `Supprimer "${c.nom}" ?`;
+  if (!confirm(msg)) return;
+
+  db.clients = db.clients.filter(c => c.id !== modalClientId);
+  saveData();
+  renderAll();
+  closeModal();
+  toast('Client supprimé.');
+}
+
+// Auto-refresh si Firebase
+if (USE_FIREBASE) setInterval(loadData, 20000);
+loadData();
+</script>
+</body>
+</html>
