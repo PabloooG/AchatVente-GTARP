@@ -347,7 +347,13 @@ async function loadData() {
   try {
     const r = await fetch(FIREBASE_URL + '/data.json');
     const d = await r.json();
-    if (d) db = d;
+    if (d) {
+      db = d;
+      if (!db.clients) db.clients = [];
+      if (!db.txs) db.txs = [];
+      if (!db.nextClientId) db.nextClientId = 1;
+      if (!db.nextTxId) db.nextTxId = 1;
+    }
     setSyncStatus('ok', 'Synchronisé — ' + new Date().toLocaleTimeString('fr-CA', {hour:'2-digit',minute:'2-digit'}));
   } catch(e) {
     setSyncStatus('err', 'Erreur de connexion');
