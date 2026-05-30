@@ -26,6 +26,9 @@
   --accent: #7c6fff;
   --accent-dim: rgba(124,111,255,0.12);
   --accent-border: rgba(124,111,255,0.3);
+  --orange: #ff9944;
+  --orange-dim: rgba(255,153,68,0.12);
+  --orange-border: rgba(255,153,68,0.3);
   --mono: 'Space Mono', monospace;
   --sans: 'DM Sans', sans-serif;
 }
@@ -40,11 +43,17 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .logo-title{font-family:var(--mono);font-size:22px;font-weight:700;letter-spacing:-0.5px;color:var(--text)}
 .logo-title span{color:var(--green)}
 .logo-sub{font-size:12px;color:var(--text3);letter-spacing:0.06em;text-transform:uppercase}
+.header-right{display:flex;align-items:center;gap:10px}
 .sync-pill{display:flex;align-items:center;gap:7px;background:var(--bg3);border:1px solid var(--border2);border-radius:99px;padding:6px 14px;font-size:12px;color:var(--text2);font-family:var(--mono)}
 .sync-dot{width:7px;height:7px;border-radius:50%;background:var(--green);flex-shrink:0}
 .sync-dot.syncing{background:#ffaa00;animation:blink 0.8s infinite}
 .sync-dot.err{background:var(--red)}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+
+/* Reset button */
+.btn-reset{display:flex;align-items:center;gap:6px;height:34px;padding:0 14px;background:var(--orange-dim);color:var(--orange);border:1px solid var(--orange-border);border-radius:99px;font-family:var(--mono);font-size:11px;font-weight:700;cursor:pointer;letter-spacing:0.04em;transition:all 0.15s;white-space:nowrap}
+.btn-reset:hover{background:var(--orange);color:#000}
+.btn-reset svg{width:13px;height:13px;flex-shrink:0}
 
 /* Metrics */
 .metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:2rem}
@@ -85,8 +94,6 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .entry-wrap input::placeholder{color:var(--text3)}
 .entry-wrap select option{background:var(--bg3);color:var(--text)}
 
-/* Match hint sous les champs client */
-.match-row{display:grid;gap:8px;grid-template-columns:1fr 1fr auto;margin-top:5px}
 .client-match-hint{font-size:10px;font-family:var(--mono);min-height:14px;transition:color 0.2s;grid-column:1/-1}
 .client-match-hint.found{color:var(--green)}
 .client-match-hint.new{color:var(--accent)}
@@ -151,9 +158,6 @@ td{padding:10px 14px;vertical-align:middle}
 .client-net-label{font-size:11px;font-family:var(--mono);color:var(--text3);text-transform:uppercase;letter-spacing:0.05em}
 .client-actions{display:flex;gap:4px;margin-top:10px}
 
-/* Section title */
-.sec-title{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:var(--text3);margin-bottom:12px}
-
 /* Modal */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:100;display:flex;align-items:center;justify-content:center;padding:1rem;opacity:0;pointer-events:none;transition:opacity 0.2s}
 .modal-overlay.open{opacity:1;pointer-events:all}
@@ -173,12 +177,60 @@ td{padding:10px 14px;vertical-align:middle}
 .btn-del-client{width:100%;height:34px;background:var(--red-dim);color:var(--red);border:1px solid var(--red-border);border-radius:8px;font-family:var(--mono);font-size:12px;font-weight:700;cursor:pointer;transition:all 0.15s}
 .btn-del-client:hover{background:var(--red);color:#fff}
 
+/* Reset modal specifics */
+.reset-modal-body{font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:18px}
+.reset-modal-body strong{color:var(--orange)}
+.reset-modal-body ul{margin:10px 0 0 16px;list-style:none;display:flex;flex-direction:column;gap:6px}
+.reset-modal-body ul li::before{content:'→  ';color:var(--text3);font-family:var(--mono)}
+.reset-modal-body .kept{color:var(--green)}
+.reset-modal-body .removed{color:var(--red)}
+.btn-reset-confirm{flex:1;height:38px;background:var(--orange-dim);color:var(--orange);border:1px solid var(--orange-border);border-radius:8px;font-family:var(--mono);font-size:13px;font-weight:700;cursor:pointer;transition:all 0.15s}
+.btn-reset-confirm:hover{background:var(--orange);color:#000}
+
 /* Counter badge in metric */
 .metric-sub{font-size:11px;color:var(--text3);font-family:var(--mono);margin-top:4px}
 
 /* Toast */
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--bg3);border:1px solid var(--green-border);color:var(--green);padding:10px 22px;border-radius:99px;font-size:13px;font-family:var(--mono);opacity:0;transition:all 0.25s;pointer-events:none;z-index:999;white-space:nowrap}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* Teal color for categories */
+:root{--teal:#00cfcf;--teal-dim:rgba(0,207,207,0.12);--teal-border:rgba(0,207,207,0.28)}
+
+/* Inventory toolbar */
+.inv-toolbar{display:flex;gap:10px;align-items:center;margin-bottom:14px;flex-wrap:wrap}
+.btn-add-item{height:34px;padding:0 16px;background:var(--teal-dim);color:var(--teal);border:1px solid var(--teal-border);border-radius:8px;font-family:var(--mono);font-size:12px;font-weight:700;cursor:pointer;transition:all 0.15s;white-space:nowrap}
+.btn-add-item:hover{background:var(--teal);color:#000}
+.btn-add-cat{height:34px;padding:0 16px;background:var(--accent-dim);color:var(--accent);border:1px solid var(--accent-border);border-radius:8px;font-family:var(--mono);font-size:12px;font-weight:700;cursor:pointer;transition:all 0.15s;white-space:nowrap}
+.btn-add-cat:hover{background:var(--accent);color:#fff}
+
+/* Stock badge */
+.stock-badge{display:inline-block;font-size:11px;padding:3px 9px;border-radius:99px;font-weight:700;font-family:var(--mono)}
+.stock-ok{background:var(--green-dim);color:var(--green);border:1px solid var(--green-border)}
+.stock-low{background:var(--orange-dim);color:var(--orange);border:1px solid var(--orange-border)}
+.stock-zero{background:var(--red-dim);color:var(--red);border:1px solid var(--red-border)}
+
+/* Category pill in transactions */
+.cat-pill{display:inline-block;font-size:10px;padding:2px 7px;border-radius:99px;font-family:var(--mono);font-weight:700;border:1px solid var(--border2);color:var(--text2);background:var(--bg3)}
+
+/* Category summary cards */
+.cat-summary-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.cat-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:16px 18px;transition:border-color 0.2s,transform 0.15s;position:relative;overflow:hidden}
+.cat-card:hover{border-color:var(--border2);transform:translateY(-1px)}
+.cat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--accent)}
+.cat-card-name{font-size:15px;font-weight:600;margin-bottom:4px}
+.cat-card-count{font-size:11px;color:var(--text3);font-family:var(--mono);margin-bottom:12px}
+.cat-divider{height:1px;background:var(--border);margin-bottom:12px}
+.cat-stat{display:flex;justify-content:space-between;align-items:center;font-size:12px;margin-bottom:5px}
+.cat-stat-label{color:var(--text3);text-transform:uppercase;letter-spacing:0.05em;font-family:var(--mono);font-size:10px}
+.cat-net{display:flex;justify-content:space-between;align-items:center;margin-top:10px;padding-top:10px;border-top:1px solid var(--border)}
+.cat-net-label{font-size:11px;font-family:var(--mono);color:var(--text3);text-transform:uppercase;letter-spacing:0.05em}
+.cat-card-uncategorized{border-style:dashed;opacity:0.7}
+
+/* Inventory table improvements */
+.inv-search-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:14px}
+.filter-select{background:var(--bg3);border:1px solid var(--border2);color:var(--text);font-family:var(--sans);font-size:13px;padding:7px 10px;height:34px;border-radius:8px;outline:none;transition:border-color 0.15s;cursor:pointer}
+.filter-select:focus{border-color:var(--accent)}
 </style>
 </head>
 <body>
@@ -189,9 +241,18 @@ td{padding:10px 14px;vertical-align:middle}
       <div class="logo-title">REG<span>/</span>TX</div>
       <div class="logo-sub">Registre achats & ventes</div>
     </div>
-    <div class="sync-pill">
-      <div class="sync-dot" id="sync-dot"></div>
-      <span id="sync-label">Chargement…</span>
+    <div class="header-right">
+      <button class="btn-reset" onclick="openResetModal()" title="Remettre les transactions à zéro">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M1 8a7 7 0 1 0 2-4.9"/>
+          <path d="M1 3v4h4"/>
+        </svg>
+        RESET
+      </button>
+      <div class="sync-pill">
+        <div class="sync-dot" id="sync-dot"></div>
+        <span id="sync-label">Chargement…</span>
+      </div>
     </div>
   </div>
 
@@ -199,7 +260,6 @@ td{padding:10px 14px;vertical-align:middle}
   <div class="entry-wrap">
     <div class="entry-hint">Saisie rapide</div>
 
-    <!-- Rangée 1 : Identité client -->
     <div class="entry-row entry-row-1">
       <div class="entry-field">
         <label class="entry-label">Nom <span>(optionnel)</span></label>
@@ -210,16 +270,13 @@ td{padding:10px 14px;vertical-align:middle}
         <label class="entry-label">Téléphone <span>(optionnel)</span></label>
         <input id="f-tel" placeholder="Ex: 418-555-0101" autocomplete="off" oninput="onClientInput()">
       </div>
-      <div style="align-self:end;padding-bottom:0">
-        <!-- spacer to align with row 2 button -->
-      </div>
+      <div style="align-self:end;padding-bottom:0"></div>
     </div>
     <div class="client-match-hint" id="client-match-hint"></div>
 
     <div class="entry-sep"></div>
 
-    <!-- Rangée 2 : Transaction -->
-    <div class="entry-row entry-row-2">
+    <div class="entry-row" style="grid-template-columns:100px 1fr 140px 90px 110px auto">
       <div class="entry-field">
         <label class="entry-label">Type</label>
         <select id="f-type">
@@ -230,6 +287,10 @@ td{padding:10px 14px;vertical-align:middle}
       <div class="entry-field">
         <label class="entry-label">Description <span>(optionnel)</span></label>
         <input id="f-desc" placeholder="Ex: Bois de 2x4">
+      </div>
+      <div class="entry-field">
+        <label class="entry-label">Catégorie <span>(optionnel)</span></label>
+        <select id="f-cat"><option value="">— Aucune —</option></select>
       </div>
       <div class="entry-field">
         <label class="entry-label">CB / Unités</label>
@@ -250,6 +311,8 @@ td{padding:10px 14px;vertical-align:middle}
   <div class="tabs">
     <button class="tab active" onclick="showTab('transactions')">Transactions</button>
     <button class="tab" onclick="showTab('clients')">Clients</button>
+    <button class="tab" onclick="showTab('inventaire')">Inventaire</button>
+    <button class="tab" onclick="showTab('categories')">Catégories</button>
   </div>
 
   <!-- Transactions -->
@@ -258,7 +321,7 @@ td{padding:10px 14px;vertical-align:middle}
       <table>
         <thead>
           <tr>
-            <th>Date</th><th>Type</th><th>Client</th><th>Description</th>
+            <th>Date</th><th>Type</th><th>Client</th><th>Description</th><th>Catégorie</th>
             <th style="text-align:right">Unités</th>
             <th style="text-align:right">Montant</th>
             <th style="text-align:right">Profit/Perte</th>
@@ -268,6 +331,39 @@ td{padding:10px 14px;vertical-align:middle}
         <tbody id="tx-body"></tbody>
       </table>
     </div>
+  </div>
+
+  <!-- Inventaire -->
+  <div class="section" id="tab-inventaire">
+    <div class="inv-toolbar">
+      <input class="search-input" id="inv-search" placeholder="🔍  Rechercher un article…" oninput="renderInventaire()">
+      <select class="filter-select" id="inv-filter-cat" onchange="renderInventaire()"><option value="">Toutes catégories</option></select>
+      <button class="btn-add-item" onclick="openItemModal()">+ Nouvel article</button>
+    </div>
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Article</th><th>Catégorie</th>
+            <th style="text-align:right">En stock</th>
+            <th style="text-align:right">Prix achat</th>
+            <th style="text-align:right">Prix vente</th>
+            <th style="text-align:right">Marge</th>
+            <th style="text-align:right">Val. stock</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="inv-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Catégories -->
+  <div class="section" id="tab-categories">
+    <div class="inv-toolbar">
+      <button class="btn-add-cat" onclick="openCatModal()">+ Nouvelle catégorie</button>
+    </div>
+    <div class="cat-summary-grid" id="cat-grid"></div>
   </div>
 
   <!-- Clients -->
@@ -303,10 +399,88 @@ td{padding:10px 14px;vertical-align:middle}
   </div>
 </div>
 
+<!-- Modal reset -->
+<div class="modal-overlay" id="reset-modal-overlay" onclick="closeResetModalIfOutside(event)">
+  <div class="modal">
+    <div class="modal-title" style="color:var(--orange)">⚠ Réinitialiser les transactions</div>
+    <div class="reset-modal-body">
+      Cette action va effacer <strong>toutes les transactions</strong> du registre.<br><br>
+      <ul>
+        <li><span class="kept">✓ Conservés</span> — Tous les clients et leurs infos</li>
+        <li><span class="removed">✕ Supprimés</span> — Toutes les transactions (ventes & achats)</li>
+        <li><span class="removed">✕ Remis à zéro</span> — Métriques, profits, unités</li>
+      </ul>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeResetModal()">Annuler</button>
+      <button class="btn-reset-confirm" onclick="confirmReset()">Tout effacer</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal article inventaire -->
+<div class="modal-overlay" id="item-modal-overlay" onclick="if(event.target===this)closeItemModal()">
+  <div class="modal" style="max-width:460px">
+    <div class="modal-title" id="item-modal-title">Nouvel article</div>
+    <div class="modal-field">
+      <div class="modal-label">Nom de l'article *</div>
+      <input class="modal-input" id="item-nom" placeholder="Ex: Bois 2x4 8pi">
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div class="modal-field">
+        <div class="modal-label">Catégorie</div>
+        <select class="modal-input" id="item-cat"><option value="">— Aucune —</option></select>
+      </div>
+      <div class="modal-field">
+        <div class="modal-label">Quantité en stock</div>
+        <input class="modal-input" id="item-stock" type="number" min="0" placeholder="0">
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div class="modal-field">
+        <div class="modal-label">Prix d'achat $</div>
+        <input class="modal-input" id="item-pa" type="number" min="0" step="0.01" placeholder="0.00">
+      </div>
+      <div class="modal-field">
+        <div class="modal-label">Prix de vente $</div>
+        <input class="modal-input" id="item-pv" type="number" min="0" step="0.01" placeholder="0.00">
+      </div>
+    </div>
+    <div class="modal-field">
+      <div class="modal-label">Note <span style="color:var(--text3);font-size:10px">(optionnel)</span></div>
+      <input class="modal-input" id="item-note" placeholder="Ex: entrepôt A, fournisseur XYZ…">
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeItemModal()">Annuler</button>
+      <button class="btn-save" onclick="saveItemModal()">Enregistrer</button>
+    </div>
+    <div class="modal-del-zone" id="item-del-zone" style="display:none">
+      <button class="btn-del-client" onclick="deleteItemFromModal()">🗑  Supprimer cet article</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal catégorie -->
+<div class="modal-overlay" id="cat-modal-overlay" onclick="if(event.target===this)closeCatModal()">
+  <div class="modal" style="max-width:380px">
+    <div class="modal-title" id="cat-modal-title">Nouvelle catégorie</div>
+    <div class="modal-field">
+      <div class="modal-label">Nom de la catégorie *</div>
+      <input class="modal-input" id="cat-nom" placeholder="Ex: Bois, Quincaillerie…">
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeCatModal()">Annuler</button>
+      <button class="btn-save" onclick="saveCatModal()">Enregistrer</button>
+    </div>
+    <div class="modal-del-zone" id="cat-del-zone" style="display:none">
+      <button class="btn-del-client" onclick="deleteCatFromModal()">🗑  Supprimer cette catégorie</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
-// ── Firebase config ──────────────────────────────────────────────────────────
 const FIREBASE_URL = "https://gtarp-achatsvente-default-rtdb.firebaseio.com";
 const USE_FIREBASE = true;
 
@@ -317,17 +491,23 @@ let db = {
     {id:3, nom:"Robert Côté",  tel:"418-555-0303"},
   ],
   txs: [
-    {id:1, date:"2026-05-01", client:1, type:"Achat", desc:"Bois de 2x4",        units:50,  montant:250},
-    {id:2, date:"2026-05-03", client:2, type:"Vente", desc:"Planches épinette",   units:30,  montant:390},
-    {id:3, date:"2026-05-10", client:1, type:"Vente", desc:"Bois traité",         units:20,  montant:310},
+    {id:1, date:"2026-05-01", client:1, type:"Achat", desc:"Bois de 2x4",        units:50,  montant:250, catId:1},
+    {id:2, date:"2026-05-03", client:2, type:"Vente", desc:"Planches épinette",   units:30,  montant:390, catId:1},
+    {id:3, date:"2026-05-10", client:1, type:"Vente", desc:"Bois traité",         units:20,  montant:310, catId:1},
   ],
   nextTxId: 4,
-  nextClientId: 4
+  nextClientId: 4,
+  categories: [
+    {id:1, nom:"Bois"}
+  ],
+  nextCatId: 2,
+  inventaire: [],
+  nextItemId: 1
 };
 
-let modalClientId = null; // null = nouveau, sinon ID du client en édition
+let modalClientId = null;
 
-// ── Sync ─────────────────────────────────────────────────────────────────────
+// ── Sync ──────────────────────────────────────────────────────────────────────
 function setSyncStatus(state, msg) {
   const dot = document.getElementById('sync-dot');
   const lbl = document.getElementById('sync-label');
@@ -347,7 +527,7 @@ async function loadData() {
   try {
     const r = await fetch(FIREBASE_URL + '/data.json');
     const d = await r.json();
-    if (d) { db = d; if (!db.clients) db.clients = []; if (!db.txs) db.txs = []; if (!db.nextClientId) db.nextClientId = 1; if (!db.nextTxId) db.nextTxId = 1; }
+    if (d) { db = d; if (!db.clients) db.clients = []; if (!db.txs) db.txs = []; if (!db.nextClientId) db.nextClientId = 1; if (!db.nextTxId) db.nextTxId = 1; if (!db.categories) db.categories = []; if (!db.nextCatId) db.nextCatId = 1; if (!db.inventaire) db.inventaire = []; if (!db.nextItemId) db.nextItemId = 1; }
     setSyncStatus('ok', 'Synchronisé — ' + new Date().toLocaleTimeString('fr-CA', {hour:'2-digit',minute:'2-digit'}));
   } catch(e) {
     setSyncStatus('err', 'Erreur de connexion');
@@ -374,7 +554,27 @@ async function saveData() {
   }
 }
 
-// ── Helpers ──────────────────────────────────────────────────────────────────
+// ── Reset ──────────────────────────────────────────────────────────────────────
+function openResetModal() {
+  document.getElementById('reset-modal-overlay').classList.add('open');
+}
+function closeResetModal() {
+  document.getElementById('reset-modal-overlay').classList.remove('open');
+}
+function closeResetModalIfOutside(e) {
+  if (e.target === document.getElementById('reset-modal-overlay')) closeResetModal();
+}
+function confirmReset() {
+  // On garde les clients et nextClientId, on efface seulement les txs
+  db.txs = [];
+  db.nextTxId = 1;
+  saveData();
+  renderAll();
+  closeResetModal();
+  toast('Transactions effacées — clients conservés.');
+}
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
 function fmt(n) {
   return (n < 0 ? '-' : '') + Math.abs(n).toLocaleString('fr-CA', {style:'currency',currency:'CAD',minimumFractionDigits:2});
 }
@@ -394,16 +594,14 @@ function toast(msg) {
   setTimeout(() => t.classList.remove('show'), 2200);
 }
 
-// ── Client-match hint dans saisie rapide ──────────────────────────────────────
+// ── Client-match hint ─────────────────────────────────────────────────────────
 function onClientInput() {
   const nom = document.getElementById('f-nom').value.trim();
   const tel = document.getElementById('f-tel').value.trim();
   const hint = document.getElementById('client-match-hint');
   if (!nom && !tel) { hint.textContent = ''; hint.className = 'client-match-hint'; return; }
-
   const found = resolveClient(nom, tel);
   if (found) {
-    const label = found.nom || found.tel || '#' + found.id;
     const extra = found.nom && found.tel ? found.nom + ' · ' + found.tel : (found.nom || found.tel);
     hint.textContent = '✓ Client existant : ' + extra;
     hint.className = 'client-match-hint found';
@@ -416,21 +614,13 @@ function onClientInput() {
   }
 }
 
-// Résolution : téléphone prioritaire, puis nom
-// Retourne le client trouvé, ou null si nouveau
 function resolveClient(nom, tel) {
-  if (tel) {
-    const byTel = getClientByTel(tel);
-    if (byTel) return byTel;
-  }
-  if (nom) {
-    const byName = getClientByName(nom);
-    if (byName) return byName;
-  }
+  if (tel) { const byTel = getClientByTel(tel); if (byTel) return byTel; }
+  if (nom) { const byName = getClientByName(nom); if (byName) return byName; }
   return null;
 }
 
-// ── Add transaction ───────────────────────────────────────────────────────────
+// ── Add transaction ────────────────────────────────────────────────────────────
 function addTx() {
   const nom     = document.getElementById('f-nom').value.trim();
   const tel     = document.getElementById('f-tel').value.trim();
@@ -445,23 +635,21 @@ function addTx() {
   err.textContent = '';
 
   const montant = Math.round((units || 1) * prix * 100) / 100;
+  const catId = parseInt(document.getElementById('f-cat').value) || null;
 
-  // Résolution : téléphone prioritaire
   let existing = resolveClient(nom, tel);
   let clientId;
 
   if (existing) {
     clientId = existing.id;
-    // Enrichir le client existant si on a de nouvelles infos
     if (nom && !existing.nom) existing.nom = nom;
     if (tel && !existing.tel) existing.tel = tel;
   } else {
-    // Nouveau client
     db.clients.push({ id: db.nextClientId, nom: nom || '', tel: tel || '' });
     clientId = db.nextClientId++;
   }
 
-  db.txs.unshift({ id: db.nextTxId++, date: today(), client: clientId, type, desc, units, montant });
+  db.txs.unshift({ id: db.nextTxId++, date: today(), client: clientId, type, desc, units, montant, catId });
   saveData();
   updateDatalist();
   renderAll();
@@ -473,13 +661,13 @@ function addTx() {
   document.getElementById('f-prix').value = '';
   document.getElementById('client-match-hint').textContent = '';
   document.getElementById('client-match-hint').className = 'client-match-hint';
+  document.getElementById('f-cat').value = '';
   document.getElementById('f-nom').focus();
   toast('Transaction ajoutée !');
 }
 
 document.addEventListener('keydown', e => {
-  if (e.key === 'Enter' && document.activeElement.id === 'f-montant') addTx();
-  if (e.key === 'Escape') closeModal();
+  if (e.key === 'Escape') { closeModal(); closeResetModal(); closeItemModal(); closeCatModal(); }
 });
 
 function deleteTx(id) {
@@ -489,12 +677,10 @@ function deleteTx(id) {
   renderAll();
 }
 
-// ── Datalist ─────────────────────────────────────────────────────────────────
+// ── Datalist ──────────────────────────────────────────────────────────────────
 function updateDatalist() {
   const dl = document.getElementById('client-list-nom');
   if (!dl) return;
-  // Une seule option par client : value = nom (pour l'autocomplete),
-  // label = "Nom · Téléphone" affiché dans la liste
   dl.innerHTML = db.clients.map(c => {
     const val   = c.nom || c.tel || '';
     const label = [c.nom, c.tel].filter(Boolean).join(' · ');
@@ -502,7 +688,7 @@ function updateDatalist() {
   }).join('');
 }
 
-// ── Tabs ─────────────────────────────────────────────────────────────────────
+// ── Tabs ──────────────────────────────────────────────────────────────────────
 function showTab(name) {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -512,7 +698,7 @@ function showTab(name) {
   ).classList.add('active');
 }
 
-// ── Render metrics ────────────────────────────────────────────────────────────
+// ── Render metrics ─────────────────────────────────────────────────────────────
 function renderMetrics() {
   const tv = db.txs.filter(t=>t.type==='Vente').reduce((s,t)=>s+t.montant,0);
   const ta = db.txs.filter(t=>t.type==='Achat').reduce((s,t)=>s+t.montant,0);
@@ -530,7 +716,7 @@ function renderMetrics() {
   `;
 }
 
-// ── Render transactions ───────────────────────────────────────────────────────
+// ── Render transactions ────────────────────────────────────────────────────────
 function renderTxs() {
   const body = document.getElementById('tx-body');
   if (!db.txs.length) {
@@ -541,11 +727,13 @@ function renderTxs() {
     const c = getClient(t.client);
     const pl = t.type==='Vente' ? t.montant : -t.montant;
     const dateStr = t.date ? new Date(t.date+'T12:00').toLocaleDateString('fr-CA',{day:'2-digit',month:'2-digit',year:'2-digit'}) : '';
+    const cat = t.catId ? db.categories.find(c=>c.id===t.catId) : null;
     return `<tr>
       <td class="mono" style="color:var(--text3)">${dateStr}</td>
       <td><span class="badge ${t.type==='Vente'?'badge-v':'badge-a'}">${t.type.toUpperCase()}</span></td>
       <td style="font-weight:500">${c ? (c.nom || c.tel || '—') : '—'}</td>
       <td style="color:var(--text2);font-size:13px">${t.desc||'—'}</td>
+      <td>${cat ? `<span class="cat-pill">${cat.nom}</span>` : '<span style="color:var(--text3);font-size:11px">—</span>'}</td>
       <td style="text-align:right" class="mono">${t.units!=null?t.units.toLocaleString('fr-CA'):'—'}</td>
       <td style="text-align:right;font-weight:600" class="mono">${fmt(t.montant)}</td>
       <td style="text-align:right" class="${pl>=0?'pos':'neg'}">${fmt(pl)}</td>
@@ -554,11 +742,10 @@ function renderTxs() {
   }).join('');
 }
 
-// ── Render clients ────────────────────────────────────────────────────────────
+// ── Render clients ─────────────────────────────────────────────────────────────
 function renderClients() {
   const grid = document.getElementById('clients-grid');
   const q = (document.getElementById('client-search')?.value || '').trim().toLowerCase();
-
   let list = db.clients;
   if (q) {
     const numQ = parseInt(q);
@@ -568,12 +755,10 @@ function renderClients() {
       (c.tel && c.tel.replace(/\D/g,'').includes(q.replace(/\D/g,'')))
     );
   }
-
   if (!list.length) {
     grid.innerHTML = `<p style="color:var(--text3);font-size:13px;font-family:var(--mono)">${q ? 'Aucun résultat pour "'+q+'"' : 'Aucun client.'}</p>`;
     return;
   }
-
   grid.innerHTML = list.map(c => {
     const txs = db.txs.filter(t => t.client === c.id);
     const tv = txs.filter(t=>t.type==='Vente').reduce((s,t)=>s+t.montant,0);
@@ -610,10 +795,13 @@ function renderAll() {
   renderMetrics();
   renderTxs();
   renderClients();
+  renderInventaire();
+  renderCategories();
   updateDatalist();
+  updateCatSelects();
 }
 
-// ── Modal client ──────────────────────────────────────────────────────────────
+// ── Modal client ───────────────────────────────────────────────────────────────
 function openAddClientModal() {
   modalClientId = null;
   document.getElementById('modal-title').textContent = 'Nouveau client';
@@ -647,11 +835,7 @@ function closeModalIfOutside(e) {
 function saveClientModal() {
   const nom = document.getElementById('modal-nom').value.trim();
   const tel = document.getElementById('modal-tel').value.trim();
-  if (!nom && !tel) {
-    document.getElementById('modal-nom').focus();
-    return;
-  }
-
+  if (!nom && !tel) { document.getElementById('modal-nom').focus(); return; }
   if (modalClientId === null) {
     db.clients.push({ id: db.nextClientId, nom: nom || '', tel: tel || '' });
     db.nextClientId++;
@@ -675,7 +859,6 @@ function deleteClientFromModal() {
     ? `Supprimer "${c.nom}" ? Ce client a ${txCount} transaction${txCount>1?'s':''} — elles seront conservées mais sans client associé.`
     : `Supprimer "${c.nom}" ?`;
   if (!confirm(msg)) return;
-
   db.clients = db.clients.filter(c => c.id !== modalClientId);
   saveData();
   renderAll();
@@ -683,9 +866,249 @@ function deleteClientFromModal() {
   toast('Client supprimé.');
 }
 
-// Auto-refresh si Firebase
 if (USE_FIREBASE) setInterval(loadData, 20000);
 loadData();
+
+// ── Helpers catégories / inventaire ──────────────────────────────────────────
+function getCat(id) { return db.categories.find(c=>c.id===id); }
+
+function updateCatSelects() {
+  const opts = '<option value="">— Aucune —</option>' +
+    db.categories.map(c=>`<option value="${c.id}">${c.nom}</option>`).join('');
+  ['f-cat','item-cat'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) { const v = el.value; el.innerHTML = opts; el.value = v; }
+  });
+  // filter select in inventaire
+  const flt = document.getElementById('inv-filter-cat');
+  if (flt) {
+    const v = flt.value;
+    flt.innerHTML = '<option value="">Toutes catégories</option>' +
+      db.categories.map(c=>`<option value="${c.id}">${c.nom}</option>`).join('');
+    flt.value = v;
+  }
+}
+
+// ── Tab fix for new tabs ──────────────────────────────────────────────────────
+const _origShowTab = showTab;
+function showTab(name) {
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  const sec = document.getElementById('tab-'+name);
+  if (sec) sec.classList.add('active');
+  const tabMap = {transactions:'trans',clients:'client',inventaire:'inventaire',categories:'catégorie'};
+  const key = tabMap[name] || name;
+  [...document.querySelectorAll('.tab')].find(t=>t.textContent.toLowerCase().includes(key))?.classList.add('active');
+}
+
+// ── Render inventaire ─────────────────────────────────────────────────────────
+function renderInventaire() {
+  const body = document.getElementById('inv-body');
+  if (!body) return;
+  const q = (document.getElementById('inv-search')?.value||'').trim().toLowerCase();
+  const catF = parseInt(document.getElementById('inv-filter-cat')?.value)||0;
+  let list = db.inventaire||[];
+  if (q) list = list.filter(i=>(i.nom||'').toLowerCase().includes(q)||(i.note||'').toLowerCase().includes(q));
+  if (catF) list = list.filter(i=>i.catId===catF);
+  if (!list.length) {
+    body.innerHTML = '<tr class="empty-row"><td colspan="8">Aucun article en inventaire</td></tr>';
+    return;
+  }
+  body.innerHTML = list.map(i => {
+    const cat = i.catId ? getCat(i.catId) : null;
+    const marge = i.pa && i.pv ? ((i.pv - i.pa)/i.pa*100) : null;
+    const valStock = (i.stock||0) * (i.pa||0);
+    let sClass = 'stock-ok', sLabel = i.stock||0;
+    if ((i.stock||0) === 0) sClass = 'stock-zero';
+    else if ((i.stock||0) <= 5) sClass = 'stock-low';
+    return `<tr>
+      <td style="font-weight:500">${i.nom}${i.note?`<br><span style="font-size:11px;color:var(--text3)">${i.note}</span>`:''}
+      </td>
+      <td>${cat?`<span class="cat-pill">${cat.nom}</span>`:'<span style="color:var(--text3);font-size:11px">—</span>'}</td>
+      <td style="text-align:right"><span class="stock-badge ${sClass}">${sLabel.toLocaleString('fr-CA')}</span></td>
+      <td style="text-align:right" class="mono">${i.pa?fmt(i.pa):'—'}</td>
+      <td style="text-align:right" class="mono">${i.pv?fmt(i.pv):'—'}</td>
+      <td style="text-align:right" class="${marge===null?'':marge>=0?'pos':'neg'}">${marge===null?'—':marge.toFixed(1)+'%'}</td>
+      <td style="text-align:right" class="mono">${valStock>0?fmt(valStock):'—'}</td>
+      <td style="text-align:center">
+        <button class="btn-edit" onclick="openItemModal(${i.id})" title="Modifier">✎</button>
+        <button class="btn-del" onclick="deleteItem(${i.id})" title="Supprimer">✕</button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+// ── Render catégories ─────────────────────────────────────────────────────────
+function renderCategories() {
+  const grid = document.getElementById('cat-grid');
+  if (!grid) return;
+  const cats = db.categories||[];
+  
+  // Build per-category summary from txs
+  const summaries = cats.map(cat => {
+    const txs = db.txs.filter(t=>t.catId===cat.id);
+    const tv = txs.filter(t=>t.type==='Vente').reduce((s,t)=>s+t.montant,0);
+    const ta = txs.filter(t=>t.type==='Achat').reduce((s,t)=>s+t.montant,0);
+    const uv = txs.filter(t=>t.type==='Vente').reduce((s,t)=>s+(t.units||0),0);
+    const ua = txs.filter(t=>t.type==='Achat').reduce((s,t)=>s+(t.units||0),0);
+    const net = tv - ta;
+    // inventory items in this category
+    const items = (db.inventaire||[]).filter(i=>i.catId===cat.id);
+    const stockVal = items.reduce((s,i)=>(s+(i.stock||0)*(i.pa||0)),0);
+    return {cat, tv, ta, uv, ua, net, txCount: txs.length, itemCount: items.length, stockVal};
+  });
+  
+  // Also show uncategorized
+  const uncatTxs = db.txs.filter(t=>!t.catId);
+  const uncatTV = uncatTxs.filter(t=>t.type==='Vente').reduce((s,t)=>s+t.montant,0);
+  const uncatTA = uncatTxs.filter(t=>t.type==='Achat').reduce((s,t)=>s+t.montant,0);
+
+  if (!summaries.length && !uncatTxs.length) {
+    grid.innerHTML = '<p style="color:var(--text3);font-size:13px;font-family:var(--mono)">Aucune catégorie. Créez-en une pour organiser vos transactions.</p>';
+    return;
+  }
+
+  grid.innerHTML = summaries.map(s => `
+    <div class="cat-card">
+      <div class="cat-card-name">${s.cat.nom}</div>
+      <div class="cat-card-count">${s.txCount} transaction${s.txCount!==1?'s':''} · ${s.itemCount} article${s.itemCount!==1?'s':''} en inv.</div>
+      <div class="cat-divider"></div>
+      ${s.tv>0?`<div class="cat-stat"><span class="cat-stat-label">Ventes</span><span class="pos">${fmt(s.tv)}</span></div>`:''}
+      ${s.ta>0?`<div class="cat-stat"><span class="cat-stat-label">Achats</span><span class="neg">${fmt(s.ta)}</span></div>`:''}
+      ${s.uv>0?`<div class="cat-stat"><span class="cat-stat-label">Unités vendues</span><span class="mono" style="font-size:12px">${s.uv.toLocaleString('fr-CA')}</span></div>`:''}
+      ${s.stockVal>0?`<div class="cat-stat"><span class="cat-stat-label">Val. stock</span><span class="mono" style="font-size:12px">${fmt(s.stockVal)}</span></div>`:''}
+      <div class="cat-net">
+        <span class="cat-net-label">Profit / Perte</span>
+        <span class="mono" style="font-size:14px;font-weight:700;color:${s.net>=0?'var(--green)':'var(--red)'}">${fmt(s.net)}</span>
+      </div>
+      <div style="margin-top:10px;display:flex;gap:6px">
+        <button class="btn-edit" style="flex:1;font-family:var(--mono);font-size:11px" onclick="openCatModal(${s.cat.id})">✎ Modifier</button>
+      </div>
+    </div>`).join('') +
+  (uncatTxs.length ? `
+    <div class="cat-card cat-card-uncategorized">
+      <div class="cat-card-name" style="color:var(--text3)">Sans catégorie</div>
+      <div class="cat-card-count">${uncatTxs.length} transaction${uncatTxs.length!==1?'s':''}</div>
+      <div class="cat-divider"></div>
+      ${uncatTV>0?`<div class="cat-stat"><span class="cat-stat-label">Ventes</span><span class="pos">${fmt(uncatTV)}</span></div>`:''}
+      ${uncatTA>0?`<div class="cat-stat"><span class="cat-stat-label">Achats</span><span class="neg">${fmt(uncatTA)}</span></div>`:''}
+      <div class="cat-net"><span class="cat-net-label">Profit / Perte</span>
+        <span class="mono" style="font-size:14px;font-weight:700;color:${(uncatTV-uncatTA)>=0?'var(--green)':'var(--red)'}">${fmt(uncatTV-uncatTA)}</span>
+      </div>
+    </div>` : '');
+}
+
+// ── Modal item inventaire ─────────────────────────────────────────────────────
+let modalItemId = null;
+function openItemModal(id) {
+  modalItemId = id || null;
+  updateCatSelects();
+  if (id) {
+    const item = (db.inventaire||[]).find(i=>i.id===id);
+    if (!item) return;
+    document.getElementById('item-modal-title').textContent = 'Modifier article';
+    document.getElementById('item-nom').value = item.nom||'';
+    document.getElementById('item-cat').value = item.catId||'';
+    document.getElementById('item-stock').value = item.stock!=null?item.stock:'';
+    document.getElementById('item-pa').value = item.pa||'';
+    document.getElementById('item-pv').value = item.pv||'';
+    document.getElementById('item-note').value = item.note||'';
+    document.getElementById('item-del-zone').style.display = 'block';
+  } else {
+    document.getElementById('item-modal-title').textContent = 'Nouvel article';
+    ['item-nom','item-stock','item-pa','item-pv','item-note'].forEach(id=>document.getElementById(id).value='');
+    document.getElementById('item-cat').value = '';
+    document.getElementById('item-del-zone').style.display = 'none';
+  }
+  document.getElementById('item-modal-overlay').classList.add('open');
+  setTimeout(()=>document.getElementById('item-nom').focus(),100);
+}
+function closeItemModal() { document.getElementById('item-modal-overlay').classList.remove('open'); }
+
+function saveItemModal() {
+  const nom = document.getElementById('item-nom').value.trim();
+  if (!nom) { document.getElementById('item-nom').focus(); return; }
+  const catId = parseInt(document.getElementById('item-cat').value)||null;
+  const stock = parseFloat(document.getElementById('item-stock').value)||0;
+  const pa = parseFloat(document.getElementById('item-pa').value)||null;
+  const pv = parseFloat(document.getElementById('item-pv').value)||null;
+  const note = document.getElementById('item-note').value.trim();
+  if (!db.inventaire) db.inventaire = [];
+  if (modalItemId) {
+    const item = db.inventaire.find(i=>i.id===modalItemId);
+    if (item) Object.assign(item, {nom,catId,stock,pa,pv,note});
+    toast('Article mis à jour !');
+  } else {
+    db.inventaire.push({id:db.nextItemId++, nom, catId, stock, pa, pv, note});
+    toast('Article ajouté !');
+  }
+  saveData(); renderAll(); closeItemModal();
+}
+
+function deleteItem(id) {
+  if (!confirm('Supprimer cet article de l\'inventaire ?')) return;
+  db.inventaire = (db.inventaire||[]).filter(i=>i.id!==id);
+  saveData(); renderAll();
+  toast('Article supprimé.');
+}
+function deleteItemFromModal() {
+  if (!modalItemId) return;
+  deleteItem(modalItemId);
+  closeItemModal();
+}
+
+// ── Modal catégorie ───────────────────────────────────────────────────────────
+let modalCatId = null;
+function openCatModal(id) {
+  modalCatId = id || null;
+  if (id) {
+    const cat = getCat(id);
+    if (!cat) return;
+    document.getElementById('cat-modal-title').textContent = 'Modifier catégorie';
+    document.getElementById('cat-nom').value = cat.nom||'';
+    document.getElementById('cat-del-zone').style.display = 'block';
+  } else {
+    document.getElementById('cat-modal-title').textContent = 'Nouvelle catégorie';
+    document.getElementById('cat-nom').value = '';
+    document.getElementById('cat-del-zone').style.display = 'none';
+  }
+  document.getElementById('cat-modal-overlay').classList.add('open');
+  setTimeout(()=>document.getElementById('cat-nom').focus(),100);
+}
+function closeCatModal() { document.getElementById('cat-modal-overlay').classList.remove('open'); }
+
+function saveCatModal() {
+  const nom = document.getElementById('cat-nom').value.trim();
+  if (!nom) { document.getElementById('cat-nom').focus(); return; }
+  if (!db.categories) db.categories = [];
+  if (modalCatId) {
+    const cat = getCat(modalCatId);
+    if (cat) cat.nom = nom;
+    toast('Catégorie mise à jour !');
+  } else {
+    db.categories.push({id:db.nextCatId++, nom});
+    toast('Catégorie ajoutée !');
+  }
+  saveData(); renderAll(); closeCatModal();
+}
+
+function deleteCatFromModal() {
+  if (!modalCatId) return;
+  const cat = getCat(modalCatId);
+  if (!cat) return;
+  const txCount = db.txs.filter(t=>t.catId===modalCatId).length;
+  const msg = txCount > 0
+    ? `Supprimer la catégorie "${cat.nom}" ? Les ${txCount} transaction(s) liées seront sans catégorie.`
+    : `Supprimer la catégorie "${cat.nom}" ?`;
+  if (!confirm(msg)) return;
+  db.categories = db.categories.filter(c=>c.id!==modalCatId);
+  db.txs.forEach(t=>{ if(t.catId===modalCatId) t.catId=null; });
+  if (db.inventaire) db.inventaire.forEach(i=>{ if(i.catId===modalCatId) i.catId=null; });
+  saveData(); renderAll(); closeCatModal();
+  toast('Catégorie supprimée.');
+}
+
+
 </script>
 </body>
 </html>
