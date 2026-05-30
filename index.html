@@ -480,7 +480,7 @@ async function loadData() {
   }
   setSyncStatus('syncing', 'Synchronisation…');
   try {
-    const r = await fetch(FIREBASE_URL + '/data.json');
+    const r = await fetch(FIREBASE_URL + '/data_v2.json');
     const d = await r.json();
     if (d) { db = d; }
     initDb();
@@ -508,7 +508,7 @@ async function saveData() {
   }
   setSyncStatus('syncing', 'Enregistrement…');
   try {
-    await fetch(FIREBASE_URL + '/data.json', {
+    await fetch(FIREBASE_URL + '/data_v2.json', {
       method: 'PUT',
       headers: {'Content-Type':'application/json'},
       body: JSON.stringify(db)
