@@ -29,13 +29,16 @@
   --orange: #ff9944;
   --orange-dim: rgba(255,153,68,0.12);
   --orange-border: rgba(255,153,68,0.3);
+  --teal: #00cfcf;
+  --teal-dim: rgba(0,207,207,0.12);
+  --teal-border: rgba(0,207,207,0.28);
   --mono: 'Space Mono', monospace;
   --sans: 'DM Sans', sans-serif;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh;font-size:15px}
 body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0}
-.app{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:2rem 1.5rem}
+.app{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:2rem 1.5rem}
 
 /* Header */
 .header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:2.5rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border)}
@@ -49,8 +52,6 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .sync-dot.syncing{background:#ffaa00;animation:blink 0.8s infinite}
 .sync-dot.err{background:var(--red)}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
-
-/* Reset button */
 .btn-reset{display:flex;align-items:center;gap:6px;height:34px;padding:0 14px;background:var(--orange-dim);color:var(--orange);border:1px solid var(--orange-border);border-radius:99px;font-family:var(--mono);font-size:11px;font-weight:700;cursor:pointer;letter-spacing:0.04em;transition:all 0.15s;white-space:nowrap}
 .btn-reset:hover{background:var(--orange);color:#000}
 .btn-reset svg{width:13px;height:13px;flex-shrink:0}
@@ -63,48 +64,40 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .metric.m-green::before{background:var(--green)}
 .metric.m-red::before{background:var(--red)}
 .metric.m-purple::before{background:var(--accent)}
+.metric.m-teal::before{background:var(--teal)}
 .metric-label{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:8px;font-family:var(--mono)}
 .metric-value{font-size:22px;font-weight:600;font-family:var(--mono)}
 .metric-value.green{color:var(--green)}
 .metric-value.red{color:var(--red)}
 .metric-value.purple{color:var(--accent)}
+.metric-value.teal{color:var(--teal)}
+.metric-sub{font-size:11px;color:var(--text3);font-family:var(--mono);margin-top:4px}
 
 /* Entry bar */
 .entry-wrap{background:var(--bg2);border:1px solid var(--border2);border-radius:14px;padding:18px 20px;margin-bottom:2rem;transition:border-color 0.2s}
 .entry-wrap:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-dim)}
 .entry-hint{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:14px;font-family:var(--mono);display:flex;align-items:center;gap:6px}
 .entry-hint::before{content:'→';color:var(--green)}
-
-/* Two-row grid */
 .entry-row{display:grid;gap:8px;align-items:end}
-.entry-row-1{grid-template-columns:1fr 1fr auto;margin-bottom:10px}
-.entry-row-2{grid-template-columns:100px 1fr 90px 110px auto}
 .entry-sep{height:1px;background:var(--border);margin:12px 0}
-
 .entry-field{display:flex;flex-direction:column;gap:5px}
 .entry-label{font-size:10px;color:var(--text3);font-family:var(--mono);text-transform:uppercase;letter-spacing:0.07em}
 .entry-label span{color:var(--text3);opacity:0.6;font-size:9px;text-transform:none;letter-spacing:0}
-
-.entry-wrap input,.entry-wrap select{
-  background:var(--bg3);border:1px solid var(--border2);color:var(--text);
-  font-family:var(--sans);font-size:14px;padding:8px 12px;height:38px;width:100%;
-  border-radius:8px;outline:none;transition:border-color 0.15s,background 0.15s
-}
+.entry-wrap input,.entry-wrap select{background:var(--bg3);border:1px solid var(--border2);color:var(--text);font-family:var(--sans);font-size:14px;padding:8px 12px;height:38px;width:100%;border-radius:8px;outline:none;transition:border-color 0.15s,background 0.15s}
 .entry-wrap input:focus,.entry-wrap select:focus{border-color:var(--accent);background:var(--bg4)}
 .entry-wrap input::placeholder{color:var(--text3)}
 .entry-wrap select option{background:var(--bg3);color:var(--text)}
-
 .client-match-hint{font-size:10px;font-family:var(--mono);min-height:14px;transition:color 0.2s;grid-column:1/-1}
 .client-match-hint.found{color:var(--green)}
 .client-match-hint.new{color:var(--accent)}
-
+.stock-hint{font-size:10px;font-family:var(--mono);min-height:14px;color:var(--teal);margin-top:2px}
 .btn-submit{height:38px;padding:0 22px;background:var(--green);color:#000;border:none;border-radius:8px;font-family:var(--mono);font-size:13px;font-weight:700;cursor:pointer;letter-spacing:0.03em;transition:opacity 0.15s,transform 0.1s;white-space:nowrap;align-self:end}
 .btn-submit:hover{opacity:0.85}
 .btn-submit:active{transform:scale(0.96)}
 .err{font-size:12px;color:var(--red);margin-top:8px;min-height:16px;font-family:var(--mono)}
 
 /* Tabs */
-.tabs{display:flex;gap:2px;margin-bottom:1.5rem;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:4px;width:fit-content}
+.tabs{display:flex;gap:2px;margin-bottom:1.5rem;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:4px;width:fit-content;flex-wrap:wrap}
 .tab{padding:7px 18px;font-size:13px;border:none;background:none;color:var(--text2);border-radius:7px;cursor:pointer;font-family:var(--sans);font-weight:500;transition:all 0.15s}
 .tab.active{background:var(--bg4);color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,0.4)}
 .tab:hover:not(.active){color:var(--text)}
@@ -122,7 +115,6 @@ tbody tr:last-child{border-bottom:none}
 tbody tr:hover{background:var(--bg2)}
 td{padding:10px 14px;vertical-align:middle}
 @keyframes rowIn{from{opacity:0;transform:translateX(-6px)}to{opacity:1;transform:translateX(0)}}
-
 .badge{display:inline-block;font-size:11px;padding:3px 9px;border-radius:99px;font-weight:700;font-family:var(--mono);letter-spacing:0.03em}
 .badge-v{background:var(--green-dim);color:var(--green);border:1px solid var(--green-border)}
 .badge-a{background:var(--red-dim);color:var(--red);border:1px solid var(--red-border)}
@@ -135,13 +127,26 @@ td{padding:10px 14px;vertical-align:middle}
 .btn-edit:hover{color:var(--accent);border-color:var(--accent-border);background:var(--accent-dim)}
 .empty-row td{text-align:center;padding:3rem;color:var(--text3);font-size:13px;font-family:var(--mono)}
 
-/* Client section toolbar */
+/* Object pill */
+.obj-pill{display:inline-block;font-size:10px;padding:2px 8px;border-radius:99px;font-family:var(--mono);font-weight:700;background:var(--teal-dim);color:var(--teal);border:1px solid var(--teal-border)}
+
+/* Stock badge */
+.stk-ok{color:var(--green);font-family:var(--mono);font-size:12px;font-weight:700}
+.stk-low{color:var(--orange);font-family:var(--mono);font-size:12px;font-weight:700}
+.stk-zero{color:var(--red);font-family:var(--mono);font-size:12px;font-weight:700}
+
+/* Client section */
 .clients-toolbar{display:flex;gap:10px;align-items:center;margin-bottom:14px;flex-wrap:wrap}
 .search-input{background:var(--bg3);border:1px solid var(--border2);color:var(--text);font-family:var(--sans);font-size:13px;padding:7px 12px;height:34px;border-radius:8px;outline:none;transition:border-color 0.15s,background 0.15s;width:220px}
 .search-input:focus{border-color:var(--accent);background:var(--bg4)}
 .search-input::placeholder{color:var(--text3)}
-.btn-add-client{height:34px;padding:0 16px;background:var(--accent-dim);color:var(--accent);border:1px solid var(--accent-border);border-radius:8px;font-family:var(--mono);font-size:12px;font-weight:700;cursor:pointer;transition:all 0.15s;white-space:nowrap}
-.btn-add-client:hover{background:var(--accent);color:#fff}
+.btn-add{height:34px;padding:0 16px;border-radius:8px;font-family:var(--mono);font-size:12px;font-weight:700;cursor:pointer;transition:all 0.15s;white-space:nowrap;border:1px solid}
+.btn-add.green{background:var(--green-dim);color:var(--green);border-color:var(--green-border)}
+.btn-add.green:hover{background:var(--green);color:#000}
+.btn-add.purple{background:var(--accent-dim);color:var(--accent);border-color:var(--accent-border)}
+.btn-add.purple:hover{background:var(--accent);color:#fff}
+.btn-add.teal{background:var(--teal-dim);color:var(--teal);border-color:var(--teal-border)}
+.btn-add.teal:hover{background:var(--teal);color:#000}
 
 /* Client cards */
 .clients-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
@@ -158,26 +163,50 @@ td{padding:10px 14px;vertical-align:middle}
 .client-net-label{font-size:11px;font-family:var(--mono);color:var(--text3);text-transform:uppercase;letter-spacing:0.05em}
 .client-actions{display:flex;gap:4px;margin-top:10px}
 
+/* Object summary cards */
+.obj-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:14px}
+.obj-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:18px 20px;position:relative;overflow:hidden;transition:border-color 0.2s,transform 0.15s}
+.obj-card:hover{border-color:var(--teal-border);transform:translateY(-2px)}
+.obj-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--teal),var(--accent))}
+.obj-card-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px}
+.obj-card-name{font-size:16px;font-weight:600}
+.obj-card-stock{text-align:right}
+.obj-card-stock-label{font-size:10px;color:var(--text3);font-family:var(--mono);text-transform:uppercase;letter-spacing:0.06em;display:block;margin-bottom:2px}
+.obj-card-divider{height:1px;background:var(--border);margin:12px 0}
+.obj-stat{display:flex;justify-content:space-between;align-items:center;font-size:12px;margin-bottom:6px}
+.obj-stat-label{color:var(--text3);text-transform:uppercase;letter-spacing:0.05em;font-family:var(--mono);font-size:10px}
+.obj-net{display:flex;justify-content:space-between;align-items:center;margin-top:12px;padding-top:12px;border-top:1px solid var(--border)}
+.obj-net-label{font-size:11px;font-family:var(--mono);color:var(--text3);text-transform:uppercase;letter-spacing:0.05em}
+.obj-card-actions{display:flex;gap:6px;margin-top:10px}
+
+/* Global summary */
+.global-summary{background:var(--bg2);border:1px solid var(--accent-border);border-radius:14px;padding:20px 22px;margin-bottom:22px;position:relative;overflow:hidden}
+.global-summary::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--green),var(--accent),var(--teal))}
+.global-title{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--text3);margin-bottom:14px}
+.global-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px}
+.global-item{display:flex;flex-direction:column;gap:4px}
+.global-item-label{font-size:10px;color:var(--text3);font-family:var(--mono);text-transform:uppercase;letter-spacing:0.06em}
+.global-item-value{font-family:var(--mono);font-size:18px;font-weight:700}
+
 /* Modal */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:100;display:flex;align-items:center;justify-content:center;padding:1rem;opacity:0;pointer-events:none;transition:opacity 0.2s}
 .modal-overlay.open{opacity:1;pointer-events:all}
-.modal{background:var(--bg2);border:1px solid var(--border2);border-radius:16px;padding:24px;width:100%;max-width:400px;transform:scale(0.95);transition:transform 0.2s}
+.modal{background:var(--bg2);border:1px solid var(--border2);border-radius:16px;padding:24px;width:100%;max-width:420px;transform:scale(0.95);transition:transform 0.2s}
 .modal-overlay.open .modal{transform:scale(1)}
 .modal-title{font-family:var(--mono);font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:18px;color:var(--text)}
 .modal-field{display:flex;flex-direction:column;gap:5px;margin-bottom:14px}
 .modal-label{font-size:11px;color:var(--text3);font-family:var(--mono);text-transform:uppercase;letter-spacing:0.06em}
-.modal-input{background:var(--bg3);border:1px solid var(--border2);color:var(--text);font-family:var(--sans);font-size:14px;padding:9px 12px;border-radius:8px;outline:none;transition:border-color 0.15s}
+.modal-input{background:var(--bg3);border:1px solid var(--border2);color:var(--text);font-family:var(--sans);font-size:14px;padding:9px 12px;border-radius:8px;outline:none;transition:border-color 0.15s;width:100%}
 .modal-input:focus{border-color:var(--accent)}
+.modal-grid{display:grid;gap:12px}
 .modal-actions{display:flex;gap:8px;margin-top:6px}
 .btn-save{flex:1;height:38px;background:var(--green);color:#000;border:none;border-radius:8px;font-family:var(--mono);font-size:13px;font-weight:700;cursor:pointer;transition:opacity 0.15s}
 .btn-save:hover{opacity:0.85}
 .btn-cancel{height:38px;padding:0 18px;background:var(--bg3);color:var(--text2);border:1px solid var(--border2);border-radius:8px;font-family:var(--mono);font-size:12px;cursor:pointer;transition:all 0.15s}
-.btn-cancel:hover{color:var(--text);border-color:var(--border2)}
+.btn-cancel:hover{color:var(--text)}
 .modal-del-zone{margin-top:14px;padding-top:14px;border-top:1px solid var(--border)}
-.btn-del-client{width:100%;height:34px;background:var(--red-dim);color:var(--red);border:1px solid var(--red-border);border-radius:8px;font-family:var(--mono);font-size:12px;font-weight:700;cursor:pointer;transition:all 0.15s}
-.btn-del-client:hover{background:var(--red);color:#fff}
-
-/* Reset modal specifics */
+.btn-del-red{width:100%;height:34px;background:var(--red-dim);color:var(--red);border:1px solid var(--red-border);border-radius:8px;font-family:var(--mono);font-size:12px;font-weight:700;cursor:pointer;transition:all 0.15s}
+.btn-del-red:hover{background:var(--red);color:#fff}
 .reset-modal-body{font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:18px}
 .reset-modal-body strong{color:var(--orange)}
 .reset-modal-body ul{margin:10px 0 0 16px;list-style:none;display:flex;flex-direction:column;gap:6px}
@@ -187,50 +216,9 @@ td{padding:10px 14px;vertical-align:middle}
 .btn-reset-confirm{flex:1;height:38px;background:var(--orange-dim);color:var(--orange);border:1px solid var(--orange-border);border-radius:8px;font-family:var(--mono);font-size:13px;font-weight:700;cursor:pointer;transition:all 0.15s}
 .btn-reset-confirm:hover{background:var(--orange);color:#000}
 
-/* Counter badge in metric */
-.metric-sub{font-size:11px;color:var(--text3);font-family:var(--mono);margin-top:4px}
-
 /* Toast */
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--bg3);border:1px solid var(--green-border);color:var(--green);padding:10px 22px;border-radius:99px;font-size:13px;font-family:var(--mono);opacity:0;transition:all 0.25s;pointer-events:none;z-index:999;white-space:nowrap}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-
-/* Teal color for categories */
-:root{--teal:#00cfcf;--teal-dim:rgba(0,207,207,0.12);--teal-border:rgba(0,207,207,0.28)}
-
-/* Inventory toolbar */
-.inv-toolbar{display:flex;gap:10px;align-items:center;margin-bottom:14px;flex-wrap:wrap}
-.btn-add-item{height:34px;padding:0 16px;background:var(--teal-dim);color:var(--teal);border:1px solid var(--teal-border);border-radius:8px;font-family:var(--mono);font-size:12px;font-weight:700;cursor:pointer;transition:all 0.15s;white-space:nowrap}
-.btn-add-item:hover{background:var(--teal);color:#000}
-.btn-add-cat{height:34px;padding:0 16px;background:var(--accent-dim);color:var(--accent);border:1px solid var(--accent-border);border-radius:8px;font-family:var(--mono);font-size:12px;font-weight:700;cursor:pointer;transition:all 0.15s;white-space:nowrap}
-.btn-add-cat:hover{background:var(--accent);color:#fff}
-
-/* Stock badge */
-.stock-badge{display:inline-block;font-size:11px;padding:3px 9px;border-radius:99px;font-weight:700;font-family:var(--mono)}
-.stock-ok{background:var(--green-dim);color:var(--green);border:1px solid var(--green-border)}
-.stock-low{background:var(--orange-dim);color:var(--orange);border:1px solid var(--orange-border)}
-.stock-zero{background:var(--red-dim);color:var(--red);border:1px solid var(--red-border)}
-
-/* Category pill in transactions */
-.cat-pill{display:inline-block;font-size:10px;padding:2px 7px;border-radius:99px;font-family:var(--mono);font-weight:700;border:1px solid var(--border2);color:var(--text2);background:var(--bg3)}
-
-/* Category summary cards */
-.cat-summary-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
-.cat-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:16px 18px;transition:border-color 0.2s,transform 0.15s;position:relative;overflow:hidden}
-.cat-card:hover{border-color:var(--border2);transform:translateY(-1px)}
-.cat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--accent)}
-.cat-card-name{font-size:15px;font-weight:600;margin-bottom:4px}
-.cat-card-count{font-size:11px;color:var(--text3);font-family:var(--mono);margin-bottom:12px}
-.cat-divider{height:1px;background:var(--border);margin-bottom:12px}
-.cat-stat{display:flex;justify-content:space-between;align-items:center;font-size:12px;margin-bottom:5px}
-.cat-stat-label{color:var(--text3);text-transform:uppercase;letter-spacing:0.05em;font-family:var(--mono);font-size:10px}
-.cat-net{display:flex;justify-content:space-between;align-items:center;margin-top:10px;padding-top:10px;border-top:1px solid var(--border)}
-.cat-net-label{font-size:11px;font-family:var(--mono);color:var(--text3);text-transform:uppercase;letter-spacing:0.05em}
-.cat-card-uncategorized{border-style:dashed;opacity:0.7}
-
-/* Inventory table improvements */
-.inv-search-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:14px}
-.filter-select{background:var(--bg3);border:1px solid var(--border2);color:var(--text);font-family:var(--sans);font-size:13px;padding:7px 10px;height:34px;border-radius:8px;outline:none;transition:border-color 0.15s;cursor:pointer}
-.filter-select:focus{border-color:var(--accent)}
 </style>
 </head>
 <body>
@@ -242,11 +230,8 @@ td{padding:10px 14px;vertical-align:middle}
       <div class="logo-sub">Registre achats & ventes</div>
     </div>
     <div class="header-right">
-      <button class="btn-reset" onclick="openResetModal()" title="Remettre les transactions à zéro">
-        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M1 8a7 7 0 1 0 2-4.9"/>
-          <path d="M1 3v4h4"/>
-        </svg>
+      <button class="btn-reset" onclick="openResetModal()">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 8a7 7 0 1 0 2-4.9"/><path d="M1 3v4h4"/></svg>
         RESET
       </button>
       <div class="sync-pill">
@@ -260,7 +245,8 @@ td{padding:10px 14px;vertical-align:middle}
   <div class="entry-wrap">
     <div class="entry-hint">Saisie rapide</div>
 
-    <div class="entry-row entry-row-1">
+    <!-- Ligne 1 : Client -->
+    <div class="entry-row" style="grid-template-columns:1fr 1fr;margin-bottom:10px">
       <div class="entry-field">
         <label class="entry-label">Nom <span>(optionnel)</span></label>
         <input id="f-nom" placeholder="Ex: Jean Bolduc" list="client-list-nom" autocomplete="off" oninput="onClientInput()">
@@ -270,31 +256,32 @@ td{padding:10px 14px;vertical-align:middle}
         <label class="entry-label">Téléphone <span>(optionnel)</span></label>
         <input id="f-tel" placeholder="Ex: 418-555-0101" autocomplete="off" oninput="onClientInput()">
       </div>
-      <div style="align-self:end;padding-bottom:0"></div>
     </div>
     <div class="client-match-hint" id="client-match-hint"></div>
-
     <div class="entry-sep"></div>
 
-    <div class="entry-row" style="grid-template-columns:100px 1fr 140px 90px 110px auto">
+    <!-- Ligne 2 : Transaction -->
+    <div class="entry-row" style="grid-template-columns:100px 180px 1fr 90px 110px auto">
       <div class="entry-field">
         <label class="entry-label">Type</label>
-        <select id="f-type">
+        <select id="f-type" onchange="onObjSelect()">
           <option value="Vente">Vente</option>
           <option value="Achat">Achat</option>
         </select>
       </div>
       <div class="entry-field">
+        <label class="entry-label">Objet / Article</label>
+        <select id="f-obj" onchange="onObjSelect()">
+          <option value="">— Choisir un objet —</option>
+        </select>
+      </div>
+      <div class="entry-field">
         <label class="entry-label">Description <span>(optionnel)</span></label>
-        <input id="f-desc" placeholder="Ex: Bois de 2x4">
+        <input id="f-desc" placeholder="Détail de la transaction">
       </div>
       <div class="entry-field">
-        <label class="entry-label">Catégorie <span>(optionnel)</span></label>
-        <select id="f-cat"><option value="">— Aucune —</option></select>
-      </div>
-      <div class="entry-field">
-        <label class="entry-label">CB / Unités</label>
-        <input id="f-units" type="number" min="0" placeholder="0">
+        <label class="entry-label">Quantité</label>
+        <input id="f-units" type="number" min="0" step="1" placeholder="1" oninput="onUnitsInput()">
       </div>
       <div class="entry-field">
         <label class="entry-label">Prix unitaire $</label>
@@ -302,27 +289,38 @@ td{padding:10px 14px;vertical-align:middle}
       </div>
       <button class="btn-submit" onclick="addTx()">+ AJOUTER</button>
     </div>
-
+    <div id="stock-hint" class="stock-hint"></div>
     <div class="err" id="err-msg"></div>
   </div>
 
+  <!-- Métriques globales -->
   <div class="metrics" id="metrics"></div>
 
+  <!-- Tabs -->
   <div class="tabs">
     <button class="tab active" onclick="showTab('transactions')">Transactions</button>
+    <button class="tab" onclick="showTab('objets')">Objets & Stock</button>
     <button class="tab" onclick="showTab('clients')">Clients</button>
-    <button class="tab" onclick="showTab('inventaire')">Inventaire</button>
-    <button class="tab" onclick="showTab('categories')">Catégories</button>
   </div>
 
   <!-- Transactions -->
   <div class="section active" id="tab-transactions">
+    <div style="display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;align-items:center">
+      <select class="search-input" id="tx-filter-obj" onchange="renderTxs()" style="width:180px">
+        <option value="">Tous les objets</option>
+      </select>
+      <select class="search-input" id="tx-filter-type" onchange="renderTxs()" style="width:130px">
+        <option value="">Achat & Vente</option>
+        <option value="Vente">Ventes seulement</option>
+        <option value="Achat">Achats seulement</option>
+      </select>
+    </div>
     <div class="tbl-wrap">
       <table>
         <thead>
           <tr>
-            <th>Date</th><th>Type</th><th>Client</th><th>Description</th><th>Catégorie</th>
-            <th style="text-align:right">Unités</th>
+            <th>Date</th><th>Type</th><th>Objet</th><th>Client</th><th>Description</th>
+            <th style="text-align:right">Qté</th>
             <th style="text-align:right">Montant</th>
             <th style="text-align:right">Profit/Perte</th>
             <th></th>
@@ -333,54 +331,77 @@ td{padding:10px 14px;vertical-align:middle}
     </div>
   </div>
 
-  <!-- Inventaire -->
-  <div class="section" id="tab-inventaire">
-    <div class="inv-toolbar">
-      <input class="search-input" id="inv-search" placeholder="🔍  Rechercher un article…" oninput="renderInventaire()">
-      <select class="filter-select" id="inv-filter-cat" onchange="renderInventaire()"><option value="">Toutes catégories</option></select>
-      <button class="btn-add-item" onclick="openItemModal()">+ Nouvel article</button>
+  <!-- Objets & Stock -->
+  <div class="section" id="tab-objets">
+    <div style="display:flex;gap:10px;margin-bottom:18px;align-items:center;flex-wrap:wrap">
+      <button class="btn-add teal" onclick="openObjModal()">+ Nouvel objet</button>
+      <span style="font-size:12px;color:var(--text3);font-family:var(--mono)">← Créez vos objets ici, puis utilisez la saisie rapide</span>
     </div>
-    <div class="tbl-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>Article</th><th>Catégorie</th>
-            <th style="text-align:right">En stock</th>
-            <th style="text-align:right">Prix achat</th>
-            <th style="text-align:right">Prix vente</th>
-            <th style="text-align:right">Marge</th>
-            <th style="text-align:right">Val. stock</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody id="inv-body"></tbody>
-      </table>
-    </div>
-  </div>
 
-  <!-- Catégories -->
-  <div class="section" id="tab-categories">
-    <div class="inv-toolbar">
-      <button class="btn-add-cat" onclick="openCatModal()">+ Nouvelle catégorie</button>
-    </div>
-    <div class="cat-summary-grid" id="cat-grid"></div>
+    <!-- Résumé global -->
+    <div class="global-summary" id="global-summary"></div>
+
+    <!-- Cartes par objet -->
+    <div class="obj-cards" id="obj-cards"></div>
   </div>
 
   <!-- Clients -->
   <div class="section" id="tab-clients">
     <div class="clients-toolbar">
       <input class="search-input" id="client-search" placeholder="🔍  Rechercher par nom ou numéro…" oninput="renderClients()">
-      <button class="btn-add-client" onclick="openAddClientModal()">+ Nouveau client</button>
+      <button class="btn-add purple" onclick="openClientModal()">+ Nouveau client</button>
     </div>
     <div class="clients-grid" id="clients-grid"></div>
   </div>
 
 </div>
 
+<!-- Modal objet -->
+<div class="modal-overlay" id="obj-modal-overlay" onclick="if(event.target===this)closeObjModal()">
+  <div class="modal" style="max-width:440px">
+    <div class="modal-title" id="obj-modal-title">Nouvel objet</div>
+    <div class="modal-field">
+      <div class="modal-label">Nom de l'objet *</div>
+      <input class="modal-input" id="obj-nom" placeholder="Ex: Bois 2x4, Vis 3po, Peinture blanche…">
+    </div>
+    <div class="modal-grid" style="grid-template-columns:1fr 1fr">
+      <div class="modal-field">
+        <div class="modal-label">Stock initial</div>
+        <input class="modal-input" id="obj-stock" type="number" min="0" placeholder="0">
+      </div>
+      <div class="modal-field">
+        <div class="modal-label">Stock minimum (alerte)</div>
+        <input class="modal-input" id="obj-min" type="number" min="0" placeholder="5">
+      </div>
+    </div>
+    <div class="modal-grid" style="grid-template-columns:1fr 1fr">
+      <div class="modal-field">
+        <div class="modal-label">Prix d'achat $ (réf.)</div>
+        <input class="modal-input" id="obj-pa" type="number" min="0" step="0.01" placeholder="0.00">
+      </div>
+      <div class="modal-field">
+        <div class="modal-label">Prix de vente $ (réf.)</div>
+        <input class="modal-input" id="obj-pv" type="number" min="0" step="0.01" placeholder="0.00">
+      </div>
+    </div>
+    <div class="modal-field">
+      <div class="modal-label">Note <span style="color:var(--text3);font-size:10px">(optionnel)</span></div>
+      <input class="modal-input" id="obj-note" placeholder="Entrepôt, fournisseur, unité…">
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeObjModal()">Annuler</button>
+      <button class="btn-save" onclick="saveObjModal()">Enregistrer</button>
+    </div>
+    <div class="modal-del-zone" id="obj-del-zone" style="display:none">
+      <button class="btn-del-red" onclick="deleteObjFromModal()">🗑  Supprimer cet objet</button>
+    </div>
+  </div>
+</div>
+
 <!-- Modal client -->
-<div class="modal-overlay" id="modal-overlay" onclick="closeModalIfOutside(event)">
+<div class="modal-overlay" id="client-modal-overlay" onclick="if(event.target===this)closeClientModal()">
   <div class="modal">
-    <div class="modal-title" id="modal-title">Nouveau client</div>
+    <div class="modal-title" id="client-modal-title">Nouveau client</div>
     <div class="modal-field">
       <div class="modal-label">Nom</div>
       <input class="modal-input" id="modal-nom" placeholder="Nom du client">
@@ -390,90 +411,30 @@ td{padding:10px 14px;vertical-align:middle}
       <input class="modal-input" id="modal-tel" placeholder="Ex: 418-555-0101">
     </div>
     <div class="modal-actions">
-      <button class="btn-cancel" onclick="closeModal()">Annuler</button>
-      <button class="btn-save" id="modal-save-btn" onclick="saveClientModal()">Enregistrer</button>
+      <button class="btn-cancel" onclick="closeClientModal()">Annuler</button>
+      <button class="btn-save" onclick="saveClientModal()">Enregistrer</button>
     </div>
     <div class="modal-del-zone" id="modal-del-zone" style="display:none">
-      <button class="btn-del-client" onclick="deleteClientFromModal()">🗑  Supprimer ce client</button>
+      <button class="btn-del-red" onclick="deleteClientFromModal()">🗑  Supprimer ce client</button>
     </div>
   </div>
 </div>
 
 <!-- Modal reset -->
-<div class="modal-overlay" id="reset-modal-overlay" onclick="closeResetModalIfOutside(event)">
+<div class="modal-overlay" id="reset-modal-overlay" onclick="if(event.target===this)closeResetModal()">
   <div class="modal">
     <div class="modal-title" style="color:var(--orange)">⚠ Réinitialiser les transactions</div>
     <div class="reset-modal-body">
       Cette action va effacer <strong>toutes les transactions</strong> du registre.<br><br>
       <ul>
-        <li><span class="kept">✓ Conservés</span> — Tous les clients et leurs infos</li>
-        <li><span class="removed">✕ Supprimés</span> — Toutes les transactions (ventes & achats)</li>
-        <li><span class="removed">✕ Remis à zéro</span> — Métriques, profits, unités</li>
+        <li><span class="kept">✓ Conservés</span> — Clients, objets, stocks</li>
+        <li><span class="removed">✕ Supprimés</span> — Toutes les transactions</li>
+        <li><span class="removed">✕ Remis à zéro</span> — Métriques, profits</li>
       </ul>
     </div>
     <div class="modal-actions">
       <button class="btn-cancel" onclick="closeResetModal()">Annuler</button>
       <button class="btn-reset-confirm" onclick="confirmReset()">Tout effacer</button>
-    </div>
-  </div>
-</div>
-
-<!-- Modal article inventaire -->
-<div class="modal-overlay" id="item-modal-overlay" onclick="if(event.target===this)closeItemModal()">
-  <div class="modal" style="max-width:460px">
-    <div class="modal-title" id="item-modal-title">Nouvel article</div>
-    <div class="modal-field">
-      <div class="modal-label">Nom de l'article *</div>
-      <input class="modal-input" id="item-nom" placeholder="Ex: Bois 2x4 8pi">
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-      <div class="modal-field">
-        <div class="modal-label">Catégorie</div>
-        <select class="modal-input" id="item-cat"><option value="">— Aucune —</option></select>
-      </div>
-      <div class="modal-field">
-        <div class="modal-label">Quantité en stock</div>
-        <input class="modal-input" id="item-stock" type="number" min="0" placeholder="0">
-      </div>
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-      <div class="modal-field">
-        <div class="modal-label">Prix d'achat $</div>
-        <input class="modal-input" id="item-pa" type="number" min="0" step="0.01" placeholder="0.00">
-      </div>
-      <div class="modal-field">
-        <div class="modal-label">Prix de vente $</div>
-        <input class="modal-input" id="item-pv" type="number" min="0" step="0.01" placeholder="0.00">
-      </div>
-    </div>
-    <div class="modal-field">
-      <div class="modal-label">Note <span style="color:var(--text3);font-size:10px">(optionnel)</span></div>
-      <input class="modal-input" id="item-note" placeholder="Ex: entrepôt A, fournisseur XYZ…">
-    </div>
-    <div class="modal-actions">
-      <button class="btn-cancel" onclick="closeItemModal()">Annuler</button>
-      <button class="btn-save" onclick="saveItemModal()">Enregistrer</button>
-    </div>
-    <div class="modal-del-zone" id="item-del-zone" style="display:none">
-      <button class="btn-del-client" onclick="deleteItemFromModal()">🗑  Supprimer cet article</button>
-    </div>
-  </div>
-</div>
-
-<!-- Modal catégorie -->
-<div class="modal-overlay" id="cat-modal-overlay" onclick="if(event.target===this)closeCatModal()">
-  <div class="modal" style="max-width:380px">
-    <div class="modal-title" id="cat-modal-title">Nouvelle catégorie</div>
-    <div class="modal-field">
-      <div class="modal-label">Nom de la catégorie *</div>
-      <input class="modal-input" id="cat-nom" placeholder="Ex: Bois, Quincaillerie…">
-    </div>
-    <div class="modal-actions">
-      <button class="btn-cancel" onclick="closeCatModal()">Annuler</button>
-      <button class="btn-save" onclick="saveCatModal()">Enregistrer</button>
-    </div>
-    <div class="modal-del-zone" id="cat-del-zone" style="display:none">
-      <button class="btn-del-client" onclick="deleteCatFromModal()">🗑  Supprimer cette catégorie</button>
     </div>
   </div>
 </div>
@@ -490,24 +451,17 @@ let db = {
     {id:2, nom:"Marie Gagnon", tel:"418-555-0202"},
     {id:3, nom:"Robert Côté",  tel:"418-555-0303"},
   ],
-  txs: [
-    {id:1, date:"2026-05-01", client:1, type:"Achat", desc:"Bois de 2x4",        units:50,  montant:250, catId:1},
-    {id:2, date:"2026-05-03", client:2, type:"Vente", desc:"Planches épinette",   units:30,  montant:390, catId:1},
-    {id:3, date:"2026-05-10", client:1, type:"Vente", desc:"Bois traité",         units:20,  montant:310, catId:1},
-  ],
-  nextTxId: 4,
+  txs: [],
+  nextTxId: 1,
   nextClientId: 4,
-  categories: [
-    {id:1, nom:"Bois"}
-  ],
-  nextCatId: 2,
-  inventaire: [],
-  nextItemId: 1
+  objets: [],
+  nextObjId: 1
 };
 
 let modalClientId = null;
+let modalObjId = null;
 
-// ── Sync ──────────────────────────────────────────────────────────────────────
+// ── Sync ───────────────────────────────────────────────────────────────────────
 function setSyncStatus(state, msg) {
   const dot = document.getElementById('sync-dot');
   const lbl = document.getElementById('sync-label');
@@ -517,9 +471,10 @@ function setSyncStatus(state, msg) {
 
 async function loadData() {
   if (!USE_FIREBASE) {
-    const saved = localStorage.getItem('regtx-v3');
+    const saved = localStorage.getItem('regtx-v4');
     if (saved) db = JSON.parse(saved);
-    setSyncStatus('ok', 'Local — configure Firebase pour partager');
+    initDb();
+    setSyncStatus('ok', 'Local');
     renderAll();
     return;
   }
@@ -527,7 +482,8 @@ async function loadData() {
   try {
     const r = await fetch(FIREBASE_URL + '/data.json');
     const d = await r.json();
-    if (d) { db = d; if (!db.clients) db.clients = []; if (!db.txs) db.txs = []; if (!db.nextClientId) db.nextClientId = 1; if (!db.nextTxId) db.nextTxId = 1; if (!db.categories) db.categories = []; if (!db.nextCatId) db.nextCatId = 1; if (!db.inventaire) db.inventaire = []; if (!db.nextItemId) db.nextItemId = 1; }
+    if (d) { db = d; }
+    initDb();
     setSyncStatus('ok', 'Synchronisé — ' + new Date().toLocaleTimeString('fr-CA', {hour:'2-digit',minute:'2-digit'}));
   } catch(e) {
     setSyncStatus('err', 'Erreur de connexion');
@@ -535,10 +491,19 @@ async function loadData() {
   renderAll();
 }
 
+function initDb() {
+  if (!db.clients)     db.clients     = [];
+  if (!db.txs)         db.txs         = [];
+  if (!db.nextClientId)db.nextClientId= 1;
+  if (!db.nextTxId)    db.nextTxId    = 1;
+  if (!db.objets)      db.objets      = [];
+  if (!db.nextObjId)   db.nextObjId   = 1;
+}
+
 async function saveData() {
   if (!USE_FIREBASE) {
-    localStorage.setItem('regtx-v3', JSON.stringify(db));
-    setSyncStatus('ok', 'Sauvegardé localement');
+    localStorage.setItem('regtx-v4', JSON.stringify(db));
+    setSyncStatus('ok', 'Sauvegardé');
     return;
   }
   setSyncStatus('syncing', 'Enregistrement…');
@@ -554,32 +519,13 @@ async function saveData() {
   }
 }
 
-// ── Reset ──────────────────────────────────────────────────────────────────────
-function openResetModal() {
-  document.getElementById('reset-modal-overlay').classList.add('open');
-}
-function closeResetModal() {
-  document.getElementById('reset-modal-overlay').classList.remove('open');
-}
-function closeResetModalIfOutside(e) {
-  if (e.target === document.getElementById('reset-modal-overlay')) closeResetModal();
-}
-function confirmReset() {
-  // On garde les clients et nextClientId, on efface seulement les txs
-  db.txs = [];
-  db.nextTxId = 1;
-  saveData();
-  renderAll();
-  closeResetModal();
-  toast('Transactions effacées — clients conservés.');
-}
-
-// ── Helpers ───────────────────────────────────────────────────────────────────
+// ── Helpers ────────────────────────────────────────────────────────────────────
 function fmt(n) {
   return (n < 0 ? '-' : '') + Math.abs(n).toLocaleString('fr-CA', {style:'currency',currency:'CAD',minimumFractionDigits:2});
 }
 function today() { return new Date().toISOString().split('T')[0]; }
-function getClient(id) { return db.clients.find(c => c.id === id); }
+function getClient(id)  { return db.clients.find(c => c.id === id); }
+function getObj(id)     { return db.objets.find(o => o.id === id); }
 function getClientByName(name) { return db.clients.find(c => (c.nom||'').toLowerCase() === name.toLowerCase()); }
 function getClientByTel(tel) {
   const clean = tel.replace(/\D/g,'');
@@ -591,10 +537,54 @@ function toast(msg) {
   const t = document.getElementById('toast');
   t.textContent = msg;
   t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2200);
+  setTimeout(() => t.classList.remove('show'), 2400);
 }
 
-// ── Client-match hint ─────────────────────────────────────────────────────────
+// ── Tabs ───────────────────────────────────────────────────────────────────────
+function showTab(name) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  const map = {transactions:0, objets:1, clients:2};
+  document.querySelectorAll('.tab')[map[name]]?.classList.add('active');
+}
+
+// ── Object selects (saisie + filtres) ─────────────────────────────────────────
+function updateObjSelects() {
+  const opts = '<option value="">— Choisir un objet —</option>' +
+    db.objets.map(o => `<option value="${o.id}">${o.nom}</option>`).join('');
+  document.getElementById('f-obj').innerHTML = opts;
+
+  const allOpts = '<option value="">Tous les objets</option>' +
+    db.objets.map(o => `<option value="${o.id}">${o.nom}</option>`).join('');
+  const txFilter = document.getElementById('tx-filter-obj');
+  if (txFilter) { const v=txFilter.value; txFilter.innerHTML=allOpts; txFilter.value=v; }
+}
+
+// ── Stock hint in form ────────────────────────────────────────────────────────
+function onObjSelect() { updateStockHint(); }
+function onUnitsInput() { updateStockHint(); }
+
+function updateStockHint() {
+  const objId = parseInt(document.getElementById('f-obj').value) || null;
+  const type  = document.getElementById('f-type').value;
+  const units = parseFloat(document.getElementById('f-units').value) || 0;
+  const hint  = document.getElementById('stock-hint');
+  if (!objId) { hint.textContent = ''; return; }
+  const obj = getObj(objId);
+  if (!obj) { hint.textContent = ''; return; }
+  const stock = obj.stock || 0;
+  if (type === 'Vente') {
+    const apres = stock - units;
+    hint.textContent = `Stock actuel : ${stock}  →  après vente : ${apres < 0 ? '⚠ ' : ''}${apres}`;
+    hint.style.color = apres < 0 ? 'var(--red)' : 'var(--teal)';
+  } else {
+    hint.textContent = `Stock actuel : ${stock}  →  après achat : ${stock + units}`;
+    hint.style.color = 'var(--teal)';
+  }
+}
+
+// ── Client hint ───────────────────────────────────────────────────────────────
 function onClientInput() {
   const nom = document.getElementById('f-nom').value.trim();
   const tel = document.getElementById('f-tel').value.trim();
@@ -606,9 +596,7 @@ function onClientInput() {
     hint.textContent = '✓ Client existant : ' + extra;
     hint.className = 'client-match-hint found';
   } else {
-    const parts = [];
-    if (nom) parts.push(nom);
-    if (tel) parts.push(tel);
+    const parts = []; if (nom) parts.push(nom); if (tel) parts.push(tel);
     hint.textContent = '+ Nouveau client : ' + parts.join(' · ');
     hint.className = 'client-match-hint new';
   }
@@ -622,124 +610,224 @@ function resolveClient(nom, tel) {
 
 // ── Add transaction ────────────────────────────────────────────────────────────
 function addTx() {
-  const nom     = document.getElementById('f-nom').value.trim();
-  const tel     = document.getElementById('f-tel').value.trim();
-  const type    = document.getElementById('f-type').value;
-  const desc    = document.getElementById('f-desc').value.trim();
-  const units   = parseFloat(document.getElementById('f-units').value) || null;
-  const prix    = parseFloat(document.getElementById('f-prix').value);
-  const err     = document.getElementById('err-msg');
+  const nom   = document.getElementById('f-nom').value.trim();
+  const tel   = document.getElementById('f-tel').value.trim();
+  const type  = document.getElementById('f-type').value;
+  const objId = parseInt(document.getElementById('f-obj').value) || null;
+  const desc  = document.getElementById('f-desc').value.trim();
+  const units = parseFloat(document.getElementById('f-units').value) || 1;
+  const prix  = parseFloat(document.getElementById('f-prix').value);
+  const err   = document.getElementById('err-msg');
 
-  if (!nom && !tel) { err.textContent = '! Entre au moins un nom ou un numéro de téléphone.'; return; }
+  if (!objId) { err.textContent = '! Choisis un objet / article.'; return; }
   if (!prix || prix <= 0) { err.textContent = '! Entre un prix unitaire valide ($).'; return; }
   err.textContent = '';
 
-  const montant = Math.round((units || 1) * prix * 100) / 100;
-  const catId = parseInt(document.getElementById('f-cat').value) || null;
+  const montant = Math.round(units * prix * 100) / 100;
 
-  let existing = resolveClient(nom, tel);
-  let clientId;
-
-  if (existing) {
-    clientId = existing.id;
-    if (nom && !existing.nom) existing.nom = nom;
-    if (tel && !existing.tel) existing.tel = tel;
-  } else {
-    db.clients.push({ id: db.nextClientId, nom: nom || '', tel: tel || '' });
-    clientId = db.nextClientId++;
+  // Résoudre / créer client
+  let clientId = null;
+  if (nom || tel) {
+    let existing = resolveClient(nom, tel);
+    if (existing) {
+      clientId = existing.id;
+      if (nom && !existing.nom) existing.nom = nom;
+      if (tel && !existing.tel) existing.tel = tel;
+    } else {
+      db.clients.push({ id: db.nextClientId, nom: nom || '', tel: tel || '' });
+      clientId = db.nextClientId++;
+    }
   }
 
-  db.txs.unshift({ id: db.nextTxId++, date: today(), client: clientId, type, desc, units, montant, catId });
+  // Mettre à jour le stock de l'objet
+  const obj = getObj(objId);
+  if (obj) {
+    if (!obj.stock) obj.stock = 0;
+    if (type === 'Vente') {
+      obj.stock -= units;
+    } else {
+      obj.stock += units;
+    }
+  }
+
+  // Prix de référence : si objet a un prix de référence et qu'on n'en a pas entré
+  db.txs.unshift({ id: db.nextTxId++, date: today(), client: clientId, type, objId, desc, units, prix, montant });
+
   saveData();
+  updateObjSelects();
   updateDatalist();
   renderAll();
 
+  // Reset form
   document.getElementById('f-nom').value = '';
   document.getElementById('f-tel').value = '';
   document.getElementById('f-desc').value = '';
   document.getElementById('f-units').value = '';
   document.getElementById('f-prix').value = '';
+  document.getElementById('f-obj').value = '';
   document.getElementById('client-match-hint').textContent = '';
   document.getElementById('client-match-hint').className = 'client-match-hint';
-  document.getElementById('f-cat').value = '';
+  document.getElementById('stock-hint').textContent = '';
   document.getElementById('f-nom').focus();
   toast('Transaction ajoutée !');
 }
 
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') { closeModal(); closeResetModal(); closeItemModal(); closeCatModal(); }
-});
-
+// ── Delete transaction (avec remise en stock) ─────────────────────────────────
 function deleteTx(id) {
-  if (!confirm('Supprimer cette transaction ?')) return;
+  const tx = db.txs.find(t => t.id === id);
+  if (!tx) return;
+  if (!confirm('Supprimer cette transaction ? Le stock sera recalculé.')) return;
+  // Inverser l'effet sur le stock
+  const obj = tx.objId ? getObj(tx.objId) : null;
+  if (obj) {
+    if (tx.type === 'Vente') obj.stock += (tx.units || 0);
+    else obj.stock -= (tx.units || 0);
+  }
   db.txs = db.txs.filter(t => t.id !== id);
   saveData();
   renderAll();
+  toast('Transaction supprimée.');
 }
 
-// ── Datalist ──────────────────────────────────────────────────────────────────
+// ── Datalist clients ──────────────────────────────────────────────────────────
 function updateDatalist() {
   const dl = document.getElementById('client-list-nom');
   if (!dl) return;
   dl.innerHTML = db.clients.map(c => {
-    const val   = c.nom || c.tel || '';
+    const val = c.nom || c.tel || '';
     const label = [c.nom, c.tel].filter(Boolean).join(' · ');
     return `<option value="${val}">${label}</option>`;
   }).join('');
 }
 
-// ── Tabs ──────────────────────────────────────────────────────────────────────
-function showTab(name) {
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  document.getElementById('tab-' + name).classList.add('active');
-  [...document.querySelectorAll('.tab')].find(t =>
-    t.textContent.toLowerCase().includes(name === 'transactions' ? 'trans' : 'client')
-  ).classList.add('active');
-}
-
-// ── Render metrics ─────────────────────────────────────────────────────────────
+// ── Render métriques globales ─────────────────────────────────────────────────
 function renderMetrics() {
-  const tv = db.txs.filter(t=>t.type==='Vente').reduce((s,t)=>s+t.montant,0);
-  const ta = db.txs.filter(t=>t.type==='Achat').reduce((s,t)=>s+t.montant,0);
+  const tv  = db.txs.filter(t=>t.type==='Vente').reduce((s,t)=>s+t.montant,0);
+  const ta  = db.txs.filter(t=>t.type==='Achat').reduce((s,t)=>s+t.montant,0);
   const net = tv - ta;
-  const uv = db.txs.filter(t=>t.type==='Vente').reduce((s,t)=>s+(t.units||0),0);
-  const ua = db.txs.filter(t=>t.type==='Achat').reduce((s,t)=>s+(t.units||0),0);
-  const nbClients = db.clients.length;
+  const uv  = db.txs.filter(t=>t.type==='Vente').reduce((s,t)=>s+(t.units||0),0);
+  const ua  = db.txs.filter(t=>t.type==='Achat').reduce((s,t)=>s+(t.units||0),0);
+  const valStock = db.objets.reduce((s,o)=>s+(o.stock||0)*(o.pa||0),0);
   document.getElementById('metrics').innerHTML = `
-    <div class="metric m-green"><div class="metric-label">Ventes</div><div class="metric-value green">${fmt(tv)}</div></div>
-    <div class="metric m-red"><div class="metric-label">Achats</div><div class="metric-value red">${fmt(ta)}</div></div>
+    <div class="metric m-green"><div class="metric-label">Ventes totales</div><div class="metric-value green">${fmt(tv)}</div><div class="metric-sub">${uv.toLocaleString('fr-CA')} unités</div></div>
+    <div class="metric m-red"><div class="metric-label">Achats totaux</div><div class="metric-value red">${fmt(ta)}</div><div class="metric-sub">${ua.toLocaleString('fr-CA')} unités</div></div>
     <div class="metric m-purple"><div class="metric-label">Profit / Perte net</div><div class="metric-value ${net>=0?'green':'red'}">${fmt(net)}</div></div>
-    <div class="metric"><div class="metric-label">Unités vendues</div><div class="metric-value purple">${uv.toLocaleString('fr-CA')}</div></div>
-    <div class="metric"><div class="metric-label">Unités achetées</div><div class="metric-value purple">${ua.toLocaleString('fr-CA')}</div></div>
-    <div class="metric"><div class="metric-label">Clients actifs</div><div class="metric-value" style="color:var(--text)">${nbClients}</div><div class="metric-sub">${db.txs.length} transaction${db.txs.length!==1?'s':''}</div></div>
+    <div class="metric m-teal"><div class="metric-label">Valeur du stock</div><div class="metric-value teal">${fmt(valStock)}</div><div class="metric-sub">${db.objets.length} objet${db.objets.length!==1?'s':''}</div></div>
+    <div class="metric"><div class="metric-label">Clients actifs</div><div class="metric-value" style="color:var(--text)">${db.clients.length}</div><div class="metric-sub">${db.txs.length} transaction${db.txs.length!==1?'s':''}</div></div>
   `;
 }
 
-// ── Render transactions ────────────────────────────────────────────────────────
+// ── Render transactions ───────────────────────────────────────────────────────
 function renderTxs() {
-  const body = document.getElementById('tx-body');
-  if (!db.txs.length) {
-    body.innerHTML = '<tr class="empty-row"><td colspan="8">Aucune transaction enregistrée</td></tr>';
+  const body   = document.getElementById('tx-body');
+  const objF   = parseInt(document.getElementById('tx-filter-obj')?.value) || 0;
+  const typeF  = document.getElementById('tx-filter-type')?.value || '';
+  let list = db.txs;
+  if (objF)  list = list.filter(t => t.objId === objF);
+  if (typeF) list = list.filter(t => t.type === typeF);
+
+  if (!list.length) {
+    body.innerHTML = '<tr class="empty-row"><td colspan="9">Aucune transaction enregistrée</td></tr>';
     return;
   }
-  body.innerHTML = db.txs.map(t => {
-    const c = getClient(t.client);
-    const pl = t.type==='Vente' ? t.montant : -t.montant;
+  body.innerHTML = list.map(t => {
+    const c   = t.client ? getClient(t.client) : null;
+    const obj = t.objId  ? getObj(t.objId)     : null;
+    const pl  = t.type==='Vente' ? t.montant : -t.montant;
     const dateStr = t.date ? new Date(t.date+'T12:00').toLocaleDateString('fr-CA',{day:'2-digit',month:'2-digit',year:'2-digit'}) : '';
-    const cat = t.catId ? db.categories.find(c=>c.id===t.catId) : null;
     return `<tr>
       <td class="mono" style="color:var(--text3)">${dateStr}</td>
       <td><span class="badge ${t.type==='Vente'?'badge-v':'badge-a'}">${t.type.toUpperCase()}</span></td>
+      <td>${obj ? `<span class="obj-pill">${obj.nom}</span>` : '<span style="color:var(--text3)">—</span>'}</td>
       <td style="font-weight:500">${c ? (c.nom || c.tel || '—') : '—'}</td>
       <td style="color:var(--text2);font-size:13px">${t.desc||'—'}</td>
-      <td>${cat ? `<span class="cat-pill">${cat.nom}</span>` : '<span style="color:var(--text3);font-size:11px">—</span>'}</td>
-      <td style="text-align:right" class="mono">${t.units!=null?t.units.toLocaleString('fr-CA'):'—'}</td>
+      <td style="text-align:right" class="mono">${(t.units||1).toLocaleString('fr-CA')}</td>
       <td style="text-align:right;font-weight:600" class="mono">${fmt(t.montant)}</td>
       <td style="text-align:right" class="${pl>=0?'pos':'neg'}">${fmt(pl)}</td>
       <td style="text-align:center"><button class="btn-del" onclick="deleteTx(${t.id})" title="Supprimer">✕</button></td>
     </tr>`;
   }).join('');
+}
+
+// ── Render Objets & Stock ─────────────────────────────────────────────────────
+function renderObjets() {
+  // --- Résumé global ---
+  const gs = document.getElementById('global-summary');
+  const tv  = db.txs.filter(t=>t.type==='Vente').reduce((s,t)=>s+t.montant,0);
+  const ta  = db.txs.filter(t=>t.type==='Achat').reduce((s,t)=>s+t.montant,0);
+  const net = tv - ta;
+  const valStock = db.objets.reduce((s,o)=>s+(Math.max(0,o.stock||0))*(o.pa||0),0);
+  const totalItems = db.objets.reduce((s,o)=>s+(Math.max(0,o.stock||0)),0);
+  gs.innerHTML = `
+    <div class="global-title">📊 Résumé global — tous objets confondus</div>
+    <div class="global-grid">
+      <div class="global-item"><span class="global-item-label">Ventes totales</span><span class="global-item-value" style="color:var(--green)">${fmt(tv)}</span></div>
+      <div class="global-item"><span class="global-item-label">Achats totaux</span><span class="global-item-value" style="color:var(--red)">${fmt(ta)}</span></div>
+      <div class="global-item"><span class="global-item-label">Profit / Perte net</span><span class="global-item-value" style="color:${net>=0?'var(--green)':'var(--red)'}">${fmt(net)}</span></div>
+      <div class="global-item"><span class="global-item-label">Valeur stock total</span><span class="global-item-value" style="color:var(--teal)">${fmt(valStock)}</span></div>
+      <div class="global-item"><span class="global-item-label">Unités en stock</span><span class="global-item-value" style="color:var(--text)">${totalItems.toLocaleString('fr-CA')}</span></div>
+      <div class="global-item"><span class="global-item-label">Nb d'objets</span><span class="global-item-value" style="color:var(--text)">${db.objets.length}</span></div>
+    </div>`;
+
+  // --- Cartes par objet ---
+  const grid = document.getElementById('obj-cards');
+  if (!db.objets.length) {
+    grid.innerHTML = '<p style="color:var(--text3);font-family:var(--mono);font-size:13px">Aucun objet créé. Cliquez "+ Nouvel objet" pour commencer.</p>';
+    return;
+  }
+  grid.innerHTML = db.objets.map(obj => {
+    const txs  = db.txs.filter(t => t.objId === obj.id);
+    const tv   = txs.filter(t=>t.type==='Vente').reduce((s,t)=>s+t.montant,0);
+    const ta   = txs.filter(t=>t.type==='Achat').reduce((s,t)=>s+t.montant,0);
+    const uv   = txs.filter(t=>t.type==='Vente').reduce((s,t)=>s+(t.units||0),0);
+    const ua   = txs.filter(t=>t.type==='Achat').reduce((s,t)=>s+(t.units||0),0);
+    const net  = tv - ta;
+    const stock = obj.stock || 0;
+    const minStock = obj.min || 0;
+    const valStock = Math.max(0,stock) * (obj.pa||0);
+    const marge = obj.pa && obj.pv ? ((obj.pv - obj.pa)/obj.pa*100) : null;
+    let stkClass = 'stk-ok';
+    if (stock <= 0) stkClass = 'stk-zero';
+    else if (minStock && stock <= minStock) stkClass = 'stk-low';
+    return `<div class="obj-card">
+      <div class="obj-card-header">
+        <div>
+          <div class="obj-card-name">${obj.nom}</div>
+          ${obj.note ? `<div style="font-size:11px;color:var(--text3);margin-top:2px">${obj.note}</div>` : ''}
+        </div>
+        <div class="obj-card-stock">
+          <span class="obj-card-stock-label">En stock</span>
+          <span class="${stkClass}" style="font-size:20px">${stock.toLocaleString('fr-CA')}</span>
+          ${minStock && stock <= minStock && stock > 0 ? `<div style="font-size:10px;color:var(--orange);font-family:var(--mono)">⚠ stock bas</div>` : ''}
+          ${stock <= 0 ? `<div style="font-size:10px;color:var(--red);font-family:var(--mono)">✕ rupture</div>` : ''}
+        </div>
+      </div>
+      <div class="obj-card-divider"></div>
+      <div class="obj-stat"><span class="obj-stat-label">Ventes</span><span class="pos">${fmt(tv)}</span></div>
+      <div class="obj-stat"><span class="obj-stat-label">Achats</span><span class="neg">${fmt(ta)}</span></div>
+      <div class="obj-stat"><span class="obj-stat-label">Unités vendues</span><span class="mono">${uv.toLocaleString('fr-CA')}</span></div>
+      <div class="obj-stat"><span class="obj-stat-label">Unités achetées</span><span class="mono">${ua.toLocaleString('fr-CA')}</span></div>
+      ${obj.pa ? `<div class="obj-stat"><span class="obj-stat-label">Prix achat réf.</span><span class="mono">${fmt(obj.pa)}</span></div>` : ''}
+      ${obj.pv ? `<div class="obj-stat"><span class="obj-stat-label">Prix vente réf.</span><span class="mono">${fmt(obj.pv)}</span></div>` : ''}
+      ${marge!==null ? `<div class="obj-stat"><span class="obj-stat-label">Marge réf.</span><span class="${marge>=0?'pos':'neg'}">${marge.toFixed(1)}%</span></div>` : ''}
+      ${valStock > 0 ? `<div class="obj-stat"><span class="obj-stat-label">Val. stock</span><span class="mono" style="color:var(--teal)">${fmt(valStock)}</span></div>` : ''}
+      <div class="obj-net">
+        <span class="obj-net-label">Profit / Perte</span>
+        <span class="mono" style="font-size:16px;font-weight:700;color:${net>=0?'var(--green)':'var(--red)'}">${fmt(net)}</span>
+      </div>
+      <div class="obj-card-actions">
+        <button class="btn-edit" style="flex:1;font-family:var(--mono);font-size:11px" onclick="openObjModal(${obj.id})">✎ Modifier</button>
+        <button class="btn-edit" style="font-family:var(--mono);font-size:11px;color:var(--teal);border-color:var(--teal-border)" onclick="filterByObj(${obj.id})">Transactions →</button>
+      </div>
+      <div style="margin-top:8px;font-size:11px;color:var(--text3);font-family:var(--mono)">${txs.length} transaction${txs.length!==1?'s':''}</div>
+    </div>`;
+  }).join('');
+}
+
+function filterByObj(id) {
+  showTab('transactions');
+  document.getElementById('tx-filter-obj').value = id;
+  renderTxs();
 }
 
 // ── Render clients ─────────────────────────────────────────────────────────────
@@ -756,18 +844,16 @@ function renderClients() {
     );
   }
   if (!list.length) {
-    grid.innerHTML = `<p style="color:var(--text3);font-size:13px;font-family:var(--mono)">${q ? 'Aucun résultat pour "'+q+'"' : 'Aucun client.'}</p>`;
+    grid.innerHTML = `<p style="color:var(--text3);font-size:13px;font-family:var(--mono)">${q?'Aucun résultat pour "'+q+'"':'Aucun client.'}</p>`;
     return;
   }
   grid.innerHTML = list.map(c => {
     const txs = db.txs.filter(t => t.client === c.id);
-    const tv = txs.filter(t=>t.type==='Vente').reduce((s,t)=>s+t.montant,0);
-    const ta = txs.filter(t=>t.type==='Achat').reduce((s,t)=>s+t.montant,0);
-    const uv = txs.filter(t=>t.type==='Vente').reduce((s,t)=>s+(t.units||0),0);
-    const ua = txs.filter(t=>t.type==='Achat').reduce((s,t)=>s+(t.units||0),0);
+    const tv  = txs.filter(t=>t.type==='Vente').reduce((s,t)=>s+t.montant,0);
+    const ta  = txs.filter(t=>t.type==='Achat').reduce((s,t)=>s+t.montant,0);
     const net = tv - ta;
     const displayName = c.nom || c.tel || '—';
-    const displaySub  = c.nom && c.tel ? c.tel : (c.nom ? '' : '');
+    const displaySub  = c.nom && c.tel ? c.tel : '';
     return `<div class="client-card">
       <div class="client-card-header">
         <div class="client-card-name">${displayName}</div>
@@ -777,60 +863,105 @@ function renderClients() {
       <div class="client-divider"></div>
       ${tv>0?`<div class="client-stat"><span class="client-stat-label">Ventes</span><span class="pos">${fmt(tv)}</span></div>`:''}
       ${ta>0?`<div class="client-stat"><span class="client-stat-label">Achats</span><span class="neg">${fmt(ta)}</span></div>`:''}
-      ${uv>0?`<div class="client-stat"><span class="client-stat-label">Unités vendues</span><span class="mono">${uv.toLocaleString('fr-CA')}</span></div>`:''}
-      ${ua>0?`<div class="client-stat"><span class="client-stat-label">Unités achetées</span><span class="mono">${ua.toLocaleString('fr-CA')}</span></div>`:''}
       <div class="client-net">
         <span class="client-net-label">NET</span>
         <span class="mono" style="font-size:14px;font-weight:700;color:${net>=0?'var(--green)':'var(--red)'}">${fmt(net)}</span>
       </div>
       <div style="margin-top:8px;font-size:11px;color:var(--text3);font-family:var(--mono)">${txs.length} transaction${txs.length!==1?'s':''}</div>
       <div class="client-actions">
-        <button class="btn-edit" style="flex:1;font-family:var(--mono);font-size:11px" onclick="openEditClientModal(${c.id})">✎ Modifier</button>
+        <button class="btn-edit" style="flex:1;font-family:var(--mono);font-size:11px" onclick="openClientModal(${c.id})">✎ Modifier</button>
       </div>
     </div>`;
   }).join('');
 }
 
+// ── Render All ─────────────────────────────────────────────────────────────────
 function renderAll() {
   renderMetrics();
   renderTxs();
+  renderObjets();
   renderClients();
-  renderInventaire();
-  renderCategories();
+  updateObjSelects();
   updateDatalist();
-  updateCatSelects();
 }
 
-// ── Modal client ───────────────────────────────────────────────────────────────
-function openAddClientModal() {
-  modalClientId = null;
-  document.getElementById('modal-title').textContent = 'Nouveau client';
-  document.getElementById('modal-nom').value = '';
-  document.getElementById('modal-tel').value = '';
-  document.getElementById('modal-del-zone').style.display = 'none';
-  document.getElementById('modal-overlay').classList.add('open');
-  setTimeout(() => document.getElementById('modal-nom').focus(), 100);
+// ── Modal Objet ────────────────────────────────────────────────────────────────
+function openObjModal(id) {
+  modalObjId = id || null;
+  if (id) {
+    const o = getObj(id);
+    if (!o) return;
+    document.getElementById('obj-modal-title').textContent = 'Modifier : ' + o.nom;
+    document.getElementById('obj-nom').value   = o.nom||'';
+    document.getElementById('obj-stock').value = o.stock!=null?o.stock:'';
+    document.getElementById('obj-min').value   = o.min||'';
+    document.getElementById('obj-pa').value    = o.pa||'';
+    document.getElementById('obj-pv').value    = o.pv||'';
+    document.getElementById('obj-note').value  = o.note||'';
+    document.getElementById('obj-del-zone').style.display = 'block';
+  } else {
+    document.getElementById('obj-modal-title').textContent = 'Nouvel objet';
+    ['obj-nom','obj-stock','obj-min','obj-pa','obj-pv','obj-note'].forEach(i=>document.getElementById(i).value='');
+    document.getElementById('obj-del-zone').style.display = 'none';
+  }
+  document.getElementById('obj-modal-overlay').classList.add('open');
+  setTimeout(()=>document.getElementById('obj-nom').focus(),100);
+}
+function closeObjModal() { document.getElementById('obj-modal-overlay').classList.remove('open'); }
+
+function saveObjModal() {
+  const nom = document.getElementById('obj-nom').value.trim();
+  if (!nom) { document.getElementById('obj-nom').focus(); return; }
+  const stock = parseFloat(document.getElementById('obj-stock').value)||0;
+  const min   = parseFloat(document.getElementById('obj-min').value)||0;
+  const pa    = parseFloat(document.getElementById('obj-pa').value)||null;
+  const pv    = parseFloat(document.getElementById('obj-pv').value)||null;
+  const note  = document.getElementById('obj-note').value.trim();
+  if (modalObjId) {
+    const o = getObj(modalObjId);
+    if (o) Object.assign(o, {nom,stock,min,pa,pv,note});
+    toast('Objet mis à jour !');
+  } else {
+    db.objets.push({id:db.nextObjId++, nom, stock, min, pa, pv, note});
+    toast('Objet ajouté !');
+  }
+  saveData(); renderAll(); closeObjModal();
 }
 
-function openEditClientModal(id) {
-  const c = getClient(id);
-  if (!c) return;
-  modalClientId = id;
-  document.getElementById('modal-title').textContent = 'Modifier client #' + id;
-  document.getElementById('modal-nom').value = c.nom;
-  document.getElementById('modal-tel').value = c.tel || '';
-  document.getElementById('modal-del-zone').style.display = 'block';
-  document.getElementById('modal-overlay').classList.add('open');
-  setTimeout(() => document.getElementById('modal-nom').focus(), 100);
+function deleteObjFromModal() {
+  if (!modalObjId) return;
+  const o = getObj(modalObjId);
+  if (!o) return;
+  const count = db.txs.filter(t=>t.objId===modalObjId).length;
+  const msg = count > 0
+    ? `Supprimer "${o.nom}" ? Cet objet a ${count} transaction(s) — elles seront conservées mais sans objet lié.`
+    : `Supprimer "${o.nom}" ?`;
+  if (!confirm(msg)) return;
+  db.objets = db.objets.filter(o=>o.id!==modalObjId);
+  saveData(); renderAll(); closeObjModal();
+  toast('Objet supprimé.');
 }
 
-function closeModal() {
-  document.getElementById('modal-overlay').classList.remove('open');
+// ── Modal Client ───────────────────────────────────────────────────────────────
+function openClientModal(id) {
+  modalClientId = id || null;
+  if (id) {
+    const c = getClient(id);
+    if (!c) return;
+    document.getElementById('client-modal-title').textContent = 'Modifier client #' + id;
+    document.getElementById('modal-nom').value = c.nom;
+    document.getElementById('modal-tel').value = c.tel || '';
+    document.getElementById('modal-del-zone').style.display = 'block';
+  } else {
+    document.getElementById('client-modal-title').textContent = 'Nouveau client';
+    document.getElementById('modal-nom').value = '';
+    document.getElementById('modal-tel').value = '';
+    document.getElementById('modal-del-zone').style.display = 'none';
+  }
+  document.getElementById('client-modal-overlay').classList.add('open');
+  setTimeout(()=>document.getElementById('modal-nom').focus(),100);
 }
-
-function closeModalIfOutside(e) {
-  if (e.target === document.getElementById('modal-overlay')) closeModal();
-}
+function closeClientModal() { document.getElementById('client-modal-overlay').classList.remove('open'); }
 
 function saveClientModal() {
   const nom = document.getElementById('modal-nom').value.trim();
@@ -845,9 +976,7 @@ function saveClientModal() {
     if (c) { c.nom = nom || ''; c.tel = tel || ''; }
     toast('Client mis à jour !');
   }
-  saveData();
-  renderAll();
-  closeModal();
+  saveData(); renderAll(); closeClientModal();
 }
 
 function deleteClientFromModal() {
@@ -856,259 +985,31 @@ function deleteClientFromModal() {
   if (!c) return;
   const txCount = db.txs.filter(t => t.client === modalClientId).length;
   const msg = txCount > 0
-    ? `Supprimer "${c.nom}" ? Ce client a ${txCount} transaction${txCount>1?'s':''} — elles seront conservées mais sans client associé.`
+    ? `Supprimer "${c.nom}" ? Ce client a ${txCount} transaction(s).`
     : `Supprimer "${c.nom}" ?`;
   if (!confirm(msg)) return;
   db.clients = db.clients.filter(c => c.id !== modalClientId);
-  saveData();
-  renderAll();
-  closeModal();
+  saveData(); renderAll(); closeClientModal();
   toast('Client supprimé.');
 }
 
+// ── Reset ──────────────────────────────────────────────────────────────────────
+function openResetModal()  { document.getElementById('reset-modal-overlay').classList.add('open'); }
+function closeResetModal() { document.getElementById('reset-modal-overlay').classList.remove('open'); }
+function confirmReset() {
+  db.txs = []; db.nextTxId = 1;
+  // Remettre stocks à 0
+  db.objets.forEach(o => o.stock = 0);
+  saveData(); renderAll(); closeResetModal();
+  toast('Transactions effacées — stocks remis à zéro.');
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { closeObjModal(); closeClientModal(); closeResetModal(); }
+});
+
 if (USE_FIREBASE) setInterval(loadData, 20000);
 loadData();
-
-// ── Helpers catégories / inventaire ──────────────────────────────────────────
-function getCat(id) { return db.categories.find(c=>c.id===id); }
-
-function updateCatSelects() {
-  const opts = '<option value="">— Aucune —</option>' +
-    db.categories.map(c=>`<option value="${c.id}">${c.nom}</option>`).join('');
-  ['f-cat','item-cat'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) { const v = el.value; el.innerHTML = opts; el.value = v; }
-  });
-  // filter select in inventaire
-  const flt = document.getElementById('inv-filter-cat');
-  if (flt) {
-    const v = flt.value;
-    flt.innerHTML = '<option value="">Toutes catégories</option>' +
-      db.categories.map(c=>`<option value="${c.id}">${c.nom}</option>`).join('');
-    flt.value = v;
-  }
-}
-
-// ── Tab fix for new tabs ──────────────────────────────────────────────────────
-const _origShowTab = showTab;
-function showTab(name) {
-  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  const sec = document.getElementById('tab-'+name);
-  if (sec) sec.classList.add('active');
-  const tabMap = {transactions:'trans',clients:'client',inventaire:'inventaire',categories:'catégorie'};
-  const key = tabMap[name] || name;
-  [...document.querySelectorAll('.tab')].find(t=>t.textContent.toLowerCase().includes(key))?.classList.add('active');
-}
-
-// ── Render inventaire ─────────────────────────────────────────────────────────
-function renderInventaire() {
-  const body = document.getElementById('inv-body');
-  if (!body) return;
-  const q = (document.getElementById('inv-search')?.value||'').trim().toLowerCase();
-  const catF = parseInt(document.getElementById('inv-filter-cat')?.value)||0;
-  let list = db.inventaire||[];
-  if (q) list = list.filter(i=>(i.nom||'').toLowerCase().includes(q)||(i.note||'').toLowerCase().includes(q));
-  if (catF) list = list.filter(i=>i.catId===catF);
-  if (!list.length) {
-    body.innerHTML = '<tr class="empty-row"><td colspan="8">Aucun article en inventaire</td></tr>';
-    return;
-  }
-  body.innerHTML = list.map(i => {
-    const cat = i.catId ? getCat(i.catId) : null;
-    const marge = i.pa && i.pv ? ((i.pv - i.pa)/i.pa*100) : null;
-    const valStock = (i.stock||0) * (i.pa||0);
-    let sClass = 'stock-ok', sLabel = i.stock||0;
-    if ((i.stock||0) === 0) sClass = 'stock-zero';
-    else if ((i.stock||0) <= 5) sClass = 'stock-low';
-    return `<tr>
-      <td style="font-weight:500">${i.nom}${i.note?`<br><span style="font-size:11px;color:var(--text3)">${i.note}</span>`:''}
-      </td>
-      <td>${cat?`<span class="cat-pill">${cat.nom}</span>`:'<span style="color:var(--text3);font-size:11px">—</span>'}</td>
-      <td style="text-align:right"><span class="stock-badge ${sClass}">${sLabel.toLocaleString('fr-CA')}</span></td>
-      <td style="text-align:right" class="mono">${i.pa?fmt(i.pa):'—'}</td>
-      <td style="text-align:right" class="mono">${i.pv?fmt(i.pv):'—'}</td>
-      <td style="text-align:right" class="${marge===null?'':marge>=0?'pos':'neg'}">${marge===null?'—':marge.toFixed(1)+'%'}</td>
-      <td style="text-align:right" class="mono">${valStock>0?fmt(valStock):'—'}</td>
-      <td style="text-align:center">
-        <button class="btn-edit" onclick="openItemModal(${i.id})" title="Modifier">✎</button>
-        <button class="btn-del" onclick="deleteItem(${i.id})" title="Supprimer">✕</button>
-      </td>
-    </tr>`;
-  }).join('');
-}
-
-// ── Render catégories ─────────────────────────────────────────────────────────
-function renderCategories() {
-  const grid = document.getElementById('cat-grid');
-  if (!grid) return;
-  const cats = db.categories||[];
-  
-  // Build per-category summary from txs
-  const summaries = cats.map(cat => {
-    const txs = db.txs.filter(t=>t.catId===cat.id);
-    const tv = txs.filter(t=>t.type==='Vente').reduce((s,t)=>s+t.montant,0);
-    const ta = txs.filter(t=>t.type==='Achat').reduce((s,t)=>s+t.montant,0);
-    const uv = txs.filter(t=>t.type==='Vente').reduce((s,t)=>s+(t.units||0),0);
-    const ua = txs.filter(t=>t.type==='Achat').reduce((s,t)=>s+(t.units||0),0);
-    const net = tv - ta;
-    // inventory items in this category
-    const items = (db.inventaire||[]).filter(i=>i.catId===cat.id);
-    const stockVal = items.reduce((s,i)=>(s+(i.stock||0)*(i.pa||0)),0);
-    return {cat, tv, ta, uv, ua, net, txCount: txs.length, itemCount: items.length, stockVal};
-  });
-  
-  // Also show uncategorized
-  const uncatTxs = db.txs.filter(t=>!t.catId);
-  const uncatTV = uncatTxs.filter(t=>t.type==='Vente').reduce((s,t)=>s+t.montant,0);
-  const uncatTA = uncatTxs.filter(t=>t.type==='Achat').reduce((s,t)=>s+t.montant,0);
-
-  if (!summaries.length && !uncatTxs.length) {
-    grid.innerHTML = '<p style="color:var(--text3);font-size:13px;font-family:var(--mono)">Aucune catégorie. Créez-en une pour organiser vos transactions.</p>';
-    return;
-  }
-
-  grid.innerHTML = summaries.map(s => `
-    <div class="cat-card">
-      <div class="cat-card-name">${s.cat.nom}</div>
-      <div class="cat-card-count">${s.txCount} transaction${s.txCount!==1?'s':''} · ${s.itemCount} article${s.itemCount!==1?'s':''} en inv.</div>
-      <div class="cat-divider"></div>
-      ${s.tv>0?`<div class="cat-stat"><span class="cat-stat-label">Ventes</span><span class="pos">${fmt(s.tv)}</span></div>`:''}
-      ${s.ta>0?`<div class="cat-stat"><span class="cat-stat-label">Achats</span><span class="neg">${fmt(s.ta)}</span></div>`:''}
-      ${s.uv>0?`<div class="cat-stat"><span class="cat-stat-label">Unités vendues</span><span class="mono" style="font-size:12px">${s.uv.toLocaleString('fr-CA')}</span></div>`:''}
-      ${s.stockVal>0?`<div class="cat-stat"><span class="cat-stat-label">Val. stock</span><span class="mono" style="font-size:12px">${fmt(s.stockVal)}</span></div>`:''}
-      <div class="cat-net">
-        <span class="cat-net-label">Profit / Perte</span>
-        <span class="mono" style="font-size:14px;font-weight:700;color:${s.net>=0?'var(--green)':'var(--red)'}">${fmt(s.net)}</span>
-      </div>
-      <div style="margin-top:10px;display:flex;gap:6px">
-        <button class="btn-edit" style="flex:1;font-family:var(--mono);font-size:11px" onclick="openCatModal(${s.cat.id})">✎ Modifier</button>
-      </div>
-    </div>`).join('') +
-  (uncatTxs.length ? `
-    <div class="cat-card cat-card-uncategorized">
-      <div class="cat-card-name" style="color:var(--text3)">Sans catégorie</div>
-      <div class="cat-card-count">${uncatTxs.length} transaction${uncatTxs.length!==1?'s':''}</div>
-      <div class="cat-divider"></div>
-      ${uncatTV>0?`<div class="cat-stat"><span class="cat-stat-label">Ventes</span><span class="pos">${fmt(uncatTV)}</span></div>`:''}
-      ${uncatTA>0?`<div class="cat-stat"><span class="cat-stat-label">Achats</span><span class="neg">${fmt(uncatTA)}</span></div>`:''}
-      <div class="cat-net"><span class="cat-net-label">Profit / Perte</span>
-        <span class="mono" style="font-size:14px;font-weight:700;color:${(uncatTV-uncatTA)>=0?'var(--green)':'var(--red)'}">${fmt(uncatTV-uncatTA)}</span>
-      </div>
-    </div>` : '');
-}
-
-// ── Modal item inventaire ─────────────────────────────────────────────────────
-let modalItemId = null;
-function openItemModal(id) {
-  modalItemId = id || null;
-  updateCatSelects();
-  if (id) {
-    const item = (db.inventaire||[]).find(i=>i.id===id);
-    if (!item) return;
-    document.getElementById('item-modal-title').textContent = 'Modifier article';
-    document.getElementById('item-nom').value = item.nom||'';
-    document.getElementById('item-cat').value = item.catId||'';
-    document.getElementById('item-stock').value = item.stock!=null?item.stock:'';
-    document.getElementById('item-pa').value = item.pa||'';
-    document.getElementById('item-pv').value = item.pv||'';
-    document.getElementById('item-note').value = item.note||'';
-    document.getElementById('item-del-zone').style.display = 'block';
-  } else {
-    document.getElementById('item-modal-title').textContent = 'Nouvel article';
-    ['item-nom','item-stock','item-pa','item-pv','item-note'].forEach(id=>document.getElementById(id).value='');
-    document.getElementById('item-cat').value = '';
-    document.getElementById('item-del-zone').style.display = 'none';
-  }
-  document.getElementById('item-modal-overlay').classList.add('open');
-  setTimeout(()=>document.getElementById('item-nom').focus(),100);
-}
-function closeItemModal() { document.getElementById('item-modal-overlay').classList.remove('open'); }
-
-function saveItemModal() {
-  const nom = document.getElementById('item-nom').value.trim();
-  if (!nom) { document.getElementById('item-nom').focus(); return; }
-  const catId = parseInt(document.getElementById('item-cat').value)||null;
-  const stock = parseFloat(document.getElementById('item-stock').value)||0;
-  const pa = parseFloat(document.getElementById('item-pa').value)||null;
-  const pv = parseFloat(document.getElementById('item-pv').value)||null;
-  const note = document.getElementById('item-note').value.trim();
-  if (!db.inventaire) db.inventaire = [];
-  if (modalItemId) {
-    const item = db.inventaire.find(i=>i.id===modalItemId);
-    if (item) Object.assign(item, {nom,catId,stock,pa,pv,note});
-    toast('Article mis à jour !');
-  } else {
-    db.inventaire.push({id:db.nextItemId++, nom, catId, stock, pa, pv, note});
-    toast('Article ajouté !');
-  }
-  saveData(); renderAll(); closeItemModal();
-}
-
-function deleteItem(id) {
-  if (!confirm('Supprimer cet article de l\'inventaire ?')) return;
-  db.inventaire = (db.inventaire||[]).filter(i=>i.id!==id);
-  saveData(); renderAll();
-  toast('Article supprimé.');
-}
-function deleteItemFromModal() {
-  if (!modalItemId) return;
-  deleteItem(modalItemId);
-  closeItemModal();
-}
-
-// ── Modal catégorie ───────────────────────────────────────────────────────────
-let modalCatId = null;
-function openCatModal(id) {
-  modalCatId = id || null;
-  if (id) {
-    const cat = getCat(id);
-    if (!cat) return;
-    document.getElementById('cat-modal-title').textContent = 'Modifier catégorie';
-    document.getElementById('cat-nom').value = cat.nom||'';
-    document.getElementById('cat-del-zone').style.display = 'block';
-  } else {
-    document.getElementById('cat-modal-title').textContent = 'Nouvelle catégorie';
-    document.getElementById('cat-nom').value = '';
-    document.getElementById('cat-del-zone').style.display = 'none';
-  }
-  document.getElementById('cat-modal-overlay').classList.add('open');
-  setTimeout(()=>document.getElementById('cat-nom').focus(),100);
-}
-function closeCatModal() { document.getElementById('cat-modal-overlay').classList.remove('open'); }
-
-function saveCatModal() {
-  const nom = document.getElementById('cat-nom').value.trim();
-  if (!nom) { document.getElementById('cat-nom').focus(); return; }
-  if (!db.categories) db.categories = [];
-  if (modalCatId) {
-    const cat = getCat(modalCatId);
-    if (cat) cat.nom = nom;
-    toast('Catégorie mise à jour !');
-  } else {
-    db.categories.push({id:db.nextCatId++, nom});
-    toast('Catégorie ajoutée !');
-  }
-  saveData(); renderAll(); closeCatModal();
-}
-
-function deleteCatFromModal() {
-  if (!modalCatId) return;
-  const cat = getCat(modalCatId);
-  if (!cat) return;
-  const txCount = db.txs.filter(t=>t.catId===modalCatId).length;
-  const msg = txCount > 0
-    ? `Supprimer la catégorie "${cat.nom}" ? Les ${txCount} transaction(s) liées seront sans catégorie.`
-    : `Supprimer la catégorie "${cat.nom}" ?`;
-  if (!confirm(msg)) return;
-  db.categories = db.categories.filter(c=>c.id!==modalCatId);
-  db.txs.forEach(t=>{ if(t.catId===modalCatId) t.catId=null; });
-  if (db.inventaire) db.inventaire.forEach(i=>{ if(i.catId===modalCatId) i.catId=null; });
-  saveData(); renderAll(); closeCatModal();
-  toast('Catégorie supprimée.');
-}
-
-
 </script>
 </body>
 </html>
