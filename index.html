@@ -452,7 +452,8 @@ let db = {
   nextTxId: 1,
   nextClientId: 4,
   objets: [],
-  nextObjId: 1
+  nextObjId: 1,
+  balance: 40000
 };
 
 let modalClientId = null;
@@ -495,6 +496,7 @@ function initDb() {
   if (!db.nextTxId)    db.nextTxId    = 1;
   if (!db.objets)      db.objets      = [];
   if (!db.nextObjId)   db.nextObjId   = 1;
+  if (db.balance === undefined) db.balance = 40000;
 }
 
 async function saveData() {
@@ -706,11 +708,11 @@ function renderMetrics() {
   const ua  = db.txs.filter(t=>t.type==='Achat').reduce((s,t)=>s+(t.units||0),0);
   const valStock = db.objets.reduce((s,o)=>s+(o.stock||0)*(o.pa||0),0);
   document.getElementById('metrics').innerHTML = `
+    <div class="metric"><div class="metric-label">Balance disponible</div><div class="metric-value" style="color:${(db.balance + tv - ta)>=0?'var(--green)':'var(--red)'}">${fmt(db.balance + tv - ta)}</div><div class="metric-sub">départ: ${fmt(db.balance)}</div></div>
     <div class="metric m-green"><div class="metric-label">Ventes totales</div><div class="metric-value green">${fmt(tv)}</div><div class="metric-sub">${uv.toLocaleString('fr-CA')} unités</div></div>
     <div class="metric m-red"><div class="metric-label">Achats totaux</div><div class="metric-value red">${fmt(ta)}</div><div class="metric-sub">${ua.toLocaleString('fr-CA')} unités</div></div>
     <div class="metric m-purple"><div class="metric-label">Profit / Perte net</div><div class="metric-value ${net>=0?'green':'red'}">${fmt(net)}</div></div>
     <div class="metric m-teal"><div class="metric-label">Valeur du stock</div><div class="metric-value teal">${fmt(valStock)}</div><div class="metric-sub">${db.objets.length} objet${db.objets.length!==1?'s':''}</div></div>
-    <div class="metric"><div class="metric-label">Clients actifs</div><div class="metric-value" style="color:var(--text)">${db.clients.length}</div><div class="metric-sub">${db.txs.length} transaction${db.txs.length!==1?'s':''}</div></div>
   `;
 }
 
