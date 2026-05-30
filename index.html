@@ -338,9 +338,6 @@ td{padding:10px 14px;vertical-align:middle}
       <span style="font-size:12px;color:var(--text3);font-family:var(--mono)">← Créez vos objets ici, puis utilisez la saisie rapide</span>
     </div>
 
-    <!-- Résumé global -->
-    <div class="global-summary" id="global-summary"></div>
-
     <!-- Cartes par objet -->
     <div class="obj-cards" id="obj-cards"></div>
   </div>
@@ -751,23 +748,7 @@ function renderTxs() {
 
 // ── Render Objets & Stock ─────────────────────────────────────────────────────
 function renderObjets() {
-  // --- Résumé global ---
-  const gs = document.getElementById('global-summary');
-  const tv  = db.txs.filter(t=>t.type==='Vente').reduce((s,t)=>s+t.montant,0);
-  const ta  = db.txs.filter(t=>t.type==='Achat').reduce((s,t)=>s+t.montant,0);
-  const net = tv - ta;
-  const valStock = db.objets.reduce((s,o)=>s+(Math.max(0,o.stock||0))*(o.pa||0),0);
-  const totalItems = db.objets.reduce((s,o)=>s+(Math.max(0,o.stock||0)),0);
-  gs.innerHTML = `
-    <div class="global-title">📊 Résumé global — tous objets confondus</div>
-    <div class="global-grid">
-      <div class="global-item"><span class="global-item-label">Ventes totales</span><span class="global-item-value" style="color:var(--green)">${fmt(tv)}</span></div>
-      <div class="global-item"><span class="global-item-label">Achats totaux</span><span class="global-item-value" style="color:var(--red)">${fmt(ta)}</span></div>
-      <div class="global-item"><span class="global-item-label">Profit / Perte net</span><span class="global-item-value" style="color:${net>=0?'var(--green)':'var(--red)'}">${fmt(net)}</span></div>
-      <div class="global-item"><span class="global-item-label">Valeur stock total</span><span class="global-item-value" style="color:var(--teal)">${fmt(valStock)}</span></div>
-      <div class="global-item"><span class="global-item-label">Unités en stock</span><span class="global-item-value" style="color:var(--text)">${totalItems.toLocaleString('fr-CA')}</span></div>
-      <div class="global-item"><span class="global-item-label">Nb d'objets</span><span class="global-item-value" style="color:var(--text)">${db.objets.length}</span></div>
-    </div>`;
+
 
   // --- Cartes par objet ---
   const grid = document.getElementById('obj-cards');
