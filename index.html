@@ -148,20 +148,20 @@ td{padding:10px 14px;vertical-align:middle}
 .btn-add.teal{background:var(--teal-dim);color:var(--teal);border-color:var(--teal-border)}
 .btn-add.teal:hover{background:var(--teal);color:#000}
 
-/* Client cards */
-.clients-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
-.client-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:16px 18px;transition:border-color 0.2s,transform 0.15s;position:relative}
+.clients-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+.client-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:20px 22px;transition:border-color 0.2s,transform 0.15s;position:relative}
 .client-card:hover{border-color:var(--border2);transform:translateY(-1px)}
 .client-card-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:2px}
-.client-card-name{font-size:15px;font-weight:600}
+.client-card-name{font-size:17px;font-weight:700}
 .client-card-id{font-family:var(--mono);font-size:10px;color:var(--text3);background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:2px 6px;margin-top:2px}
-.client-card-tel{font-size:12px;color:var(--text3);font-family:var(--mono);margin-bottom:12px;margin-top:3px}
+.client-card-tel{font-size:12px;color:var(--text3);font-family:var(--mono);margin-bottom:6px;margin-top:3px}
+.client-card-desc{font-size:12px;color:var(--text2);font-family:var(--mono);background:var(--bg3);border-radius:8px;padding:8px 10px;margin-bottom:12px;line-height:1.5;white-space:pre-wrap;border:1px solid var(--border)}
 .client-divider{height:1px;background:var(--border);margin-bottom:12px}
-.client-stat{display:flex;justify-content:space-between;align-items:center;font-size:12px;margin-bottom:5px}
+.client-stat{display:flex;justify-content:space-between;align-items:center;font-size:12px;margin-bottom:6px}
 .client-stat-label{color:var(--text3);text-transform:uppercase;letter-spacing:0.05em;font-family:var(--mono);font-size:10px}
 .client-net{display:flex;justify-content:space-between;align-items:center;margin-top:10px;padding-top:10px;border-top:1px solid var(--border)}
 .client-net-label{font-size:11px;font-family:var(--mono);color:var(--text3);text-transform:uppercase;letter-spacing:0.05em}
-.client-actions{display:flex;gap:4px;margin-top:10px}
+.client-actions{display:flex;gap:4px;margin-top:12px}
 
 /* Object summary cards */
 .obj-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:14px}
@@ -406,6 +406,10 @@ td{padding:10px 14px;vertical-align:middle}
     <div class="modal-field">
       <div class="modal-label">Téléphone <span style="color:var(--text3);font-size:10px">(optionnel)</span></div>
       <input class="modal-input" id="modal-tel" placeholder="Ex: 418-555-0101">
+    </div>
+    <div class="modal-field">
+      <div class="modal-label">Description <span style="color:var(--text3);font-size:10px">(optionnel)</span></div>
+      <textarea class="modal-input" id="modal-desc" placeholder="Notes, adresse, contacts, détails…" style="resize:vertical;min-height:70px;font-family:var(--mono);font-size:12px;line-height:1.5"></textarea>
     </div>
     <div class="modal-actions">
       <button class="btn-cancel" onclick="closeClientModal()">Annuler</button>
@@ -843,6 +847,7 @@ function renderClients() {
         <div class="client-card-id">#${c.id}</div>
       </div>
       ${displaySub ? `<div class="client-card-tel">${displaySub}</div>` : `<div style="height:6px"></div>`}
+      ${c.desc ? `<div class="client-card-desc">${c.desc}</div>` : ''}
       <div class="client-divider"></div>
       ${tv>0?`<div class="client-stat"><span class="client-stat-label">Ventes</span><span class="pos">${fmt(tv)}</span></div>`:''}
       ${ta>0?`<div class="client-stat"><span class="client-stat-label">Achats</span><span class="neg">${fmt(ta)}</span></div>`:''}
@@ -934,11 +939,13 @@ function openClientModal(id) {
     document.getElementById('client-modal-title').textContent = 'Modifier client #' + id;
     document.getElementById('modal-nom').value = c.nom;
     document.getElementById('modal-tel').value = c.tel || '';
+    document.getElementById('modal-desc').value = c.desc || '';
     document.getElementById('modal-del-zone').style.display = 'block';
   } else {
     document.getElementById('client-modal-title').textContent = 'Nouveau client';
     document.getElementById('modal-nom').value = '';
     document.getElementById('modal-tel').value = '';
+    document.getElementById('modal-desc').value = '';
     document.getElementById('modal-del-zone').style.display = 'none';
   }
   document.getElementById('client-modal-overlay').classList.add('open');
@@ -947,16 +954,17 @@ function openClientModal(id) {
 function closeClientModal() { document.getElementById('client-modal-overlay').classList.remove('open'); }
 
 function saveClientModal() {
-  const nom = document.getElementById('modal-nom').value.trim();
-  const tel = document.getElementById('modal-tel').value.trim();
+  const nom  = document.getElementById('modal-nom').value.trim();
+  const tel  = document.getElementById('modal-tel').value.trim();
+  const desc = document.getElementById('modal-desc').value.trim();
   if (!nom && !tel) { document.getElementById('modal-nom').focus(); return; }
   if (modalClientId === null) {
-    db.clients.push({ id: db.nextClientId, nom: nom || '', tel: tel || '' });
+    db.clients.push({ id: db.nextClientId, nom: nom || '', tel: tel || '', desc: desc || '' });
     db.nextClientId++;
     toast('Client ajouté !');
   } else {
     const c = getClient(modalClientId);
-    if (c) { c.nom = nom || ''; c.tel = tel || ''; }
+    if (c) { c.nom = nom || ''; c.tel = tel || ''; c.desc = desc || ''; }
     toast('Client mis à jour !');
   }
   saveData(); renderAll(); closeClientModal();
