@@ -337,8 +337,6 @@ td{padding:10px 14px;vertical-align:middle}
       <button class="btn-add teal" onclick="openObjModal()">+ Nouvel objet</button>
       <span style="font-size:12px;color:var(--text3);font-family:var(--mono)">← Créez vos objets ici, puis utilisez la saisie rapide</span>
     </div>
-
-    <!-- Cartes par objet -->
     <div class="obj-cards" id="obj-cards"></div>
   </div>
 
@@ -463,7 +461,6 @@ let db = {
 let modalClientId = null;
 let modalObjId = null;
 
-// ── Sync ───────────────────────────────────────────────────────────────────────
 function setSyncStatus(state, msg) {
   const dot = document.getElementById('sync-dot');
   const lbl = document.getElementById('sync-label');
@@ -522,7 +519,6 @@ async function saveData() {
   }
 }
 
-// ── Helpers ────────────────────────────────────────────────────────────────────
 function fmt(n) {
   return (n < 0 ? '-' : '') + Math.abs(n).toLocaleString('fr-CA', {style:'currency',currency:'CAD',minimumFractionDigits:2});
 }
@@ -543,7 +539,6 @@ function toast(msg) {
   setTimeout(() => t.classList.remove('show'), 2400);
 }
 
-// ── Tabs ───────────────────────────────────────────────────────────────────────
 function showTab(name) {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -552,7 +547,6 @@ function showTab(name) {
   document.querySelectorAll('.tab')[map[name]]?.classList.add('active');
 }
 
-// ── Object selects (saisie + filtres) ─────────────────────────────────────────
 function updateObjSelects() {
   const opts = '<option value="">— Choisir un objet —</option>' +
     db.objets.map(o => `<option value="${o.id}">${o.nom}</option>`).join('');
@@ -564,7 +558,6 @@ function updateObjSelects() {
   if (txFilter) { const v=txFilter.value; txFilter.innerHTML=allOpts; txFilter.value=v; }
 }
 
-// ── Stock hint in form ────────────────────────────────────────────────────────
 function onObjSelect() { updateStockHint(); }
 function onUnitsInput() { updateStockHint(); }
 
@@ -587,7 +580,6 @@ function updateStockHint() {
   }
 }
 
-// ── Client hint ───────────────────────────────────────────────────────────────
 function onClientInput() {
   const nom = document.getElementById('f-nom').value.trim();
   const tel = document.getElementById('f-tel').value.trim();
@@ -611,7 +603,6 @@ function resolveClient(nom, tel) {
   return null;
 }
 
-// ── Add transaction ────────────────────────────────────────────────────────────
 function addTx() {
   const nom   = document.getElementById('f-nom').value.trim();
   const tel   = document.getElementById('f-tel').value.trim();
@@ -628,7 +619,6 @@ function addTx() {
 
   const montant = Math.round(units * prix * 100) / 100;
 
-  // Résoudre / créer client
   let clientId = null;
   if (nom || tel) {
     let existing = resolveClient(nom, tel);
@@ -642,18 +632,13 @@ function addTx() {
     }
   }
 
-  // Mettre à jour le stock de l'objet
   const obj = getObj(objId);
   if (obj) {
     if (!obj.stock) obj.stock = 0;
-    if (type === 'Vente') {
-      obj.stock -= units;
-    } else {
-      obj.stock += units;
-    }
+    if (type === 'Vente') obj.stock -= units;
+    else obj.stock += units;
   }
 
-  // Prix de référence : si objet a un prix de référence et qu'on n'en a pas entré
   db.txs.unshift({ id: db.nextTxId++, date: today(), client: clientId, type, objId, desc, units, prix, montant });
 
   saveData();
@@ -661,7 +646,6 @@ function addTx() {
   updateDatalist();
   renderAll();
 
-  // Reset form
   document.getElementById('f-nom').value = '';
   document.getElementById('f-tel').value = '';
   document.getElementById('f-desc').value = '';
@@ -675,12 +659,10 @@ function addTx() {
   toast('Transaction ajoutée !');
 }
 
-// ── Delete transaction (avec remise en stock) ─────────────────────────────────
 function deleteTx(id) {
   const tx = db.txs.find(t => t.id === id);
   if (!tx) return;
   if (!confirm('Supprimer cette transaction ? Le stock sera recalculé.')) return;
-  // Inverser l'effet sur le stock
   const obj = tx.objId ? getObj(tx.objId) : null;
   if (obj) {
     if (tx.type === 'Vente') obj.stock += (tx.units || 0);
@@ -692,7 +674,6 @@ function deleteTx(id) {
   toast('Transaction supprimée.');
 }
 
-// ── Datalist clients ──────────────────────────────────────────────────────────
 function updateDatalist() {
   const dl = document.getElementById('client-list-nom');
   if (!dl) return;
@@ -703,7 +684,6 @@ function updateDatalist() {
   }).join('');
 }
 
-// ── Render métriques globales ─────────────────────────────────────────────────
 function editBalance() {
   const current = db.balance ?? 40000;
   const input = prompt('Balance de départ ($) :', current);
@@ -718,21 +698,44 @@ function editBalance() {
 function renderMetrics() {
   const tv  = db.txs.filter(t=>t.type==='Vente').reduce((s,t)=>s+t.montant,0);
   const ta  = db.txs.filter(t=>t.type==='Achat').reduce((s,t)=>s+t.montant,0);
-  const net = tv - ta;
   const uv  = db.txs.filter(t=>t.type==='Vente').reduce((s,t)=>s+(t.units||0),0);
   const ua  = db.txs.filter(t=>t.type==='Achat').reduce((s,t)=>s+(t.units||0),0);
-  const valStock = db.objets.reduce((s,o)=>s+(Math.max(0,o.stock||0))*(o.pv||0),0);
-  const totalUnitsStock = db.objets.reduce((s,o)=>s+Math.max(0,o.stock||0),0);
+
+  // Valeur du stock au prix d'achat de référence
+  const valStockPA = db.objets.reduce((s,o) => s + (Math.max(0, o.stock||0) * (o.pa||0)), 0);
+
+  const cashDisponible = db.balance + tv - ta;
+  const avoir = cashDisponible + valStockPA;
+
   document.getElementById('metrics').innerHTML = `
-    <div class="metric" style="cursor:pointer" onclick="editBalance()" title="Cliquer pour modifier la balance de départ"><div class="metric-label">Balance disponible</div><div class="metric-value" style="color:${(db.balance + tv - ta)>=0?'var(--green)':'var(--red)'}">${fmt(db.balance + tv - ta)}</div><div class="metric-sub" style="color:var(--accent)">✎ départ: ${fmt(db.balance)}</div></div>
-    <div class="metric m-green"><div class="metric-label">Ventes totales</div><div class="metric-value green">${fmt(tv)}</div><div class="metric-sub">${uv.toLocaleString('fr-CA')} unités</div></div>
-    <div class="metric m-red"><div class="metric-label">Achats totaux</div><div class="metric-value red">${fmt(ta)}</div><div class="metric-sub">${ua.toLocaleString('fr-CA')} unités</div></div>
-    <div class="metric m-purple"><div class="metric-label">Profit / Perte net</div><div class="metric-value ${net>=0?'green':'red'}">${fmt(net)}</div></div>
-    <div class="metric m-teal"><div class="metric-label">Valeur du stock</div><div class="metric-value teal">${fmt(valStock)}</div><div class="metric-sub">${totalUnitsStock} unité${totalUnitsStock!==1?'s':''} en stock</div></div>
+    <div class="metric" style="cursor:pointer" onclick="editBalance()" title="Cliquer pour modifier la balance de départ">
+      <div class="metric-label">Balance disponible</div>
+      <div class="metric-value" style="color:${cashDisponible>=0?'var(--green)':'var(--red)'}">${fmt(cashDisponible)}</div>
+      <div class="metric-sub" style="color:var(--accent)">✎ départ: ${fmt(db.balance)}</div>
+    </div>
+    <div class="metric m-green">
+      <div class="metric-label">Ventes totales</div>
+      <div class="metric-value green">${fmt(tv)}</div>
+      <div class="metric-sub">${uv.toLocaleString('fr-CA')} unités</div>
+    </div>
+    <div class="metric m-red">
+      <div class="metric-label">Achats totaux</div>
+      <div class="metric-value red">${fmt(ta)}</div>
+      <div class="metric-sub">${ua.toLocaleString('fr-CA')} unités</div>
+    </div>
+    <div class="metric m-purple">
+      <div class="metric-label">Avoir total</div>
+      <div class="metric-value purple">${fmt(avoir)}</div>
+      <div class="metric-sub">cash + stock (PA)</div>
+    </div>
+    <div class="metric m-teal">
+      <div class="metric-label">Valeur du stock</div>
+      <div class="metric-value teal">${fmt(valStockPA)}</div>
+      <div class="metric-sub">au prix d'achat</div>
+    </div>
   `;
 }
 
-// ── Render transactions ───────────────────────────────────────────────────────
 function renderTxs() {
   const body   = document.getElementById('tx-body');
   const objF   = parseInt(document.getElementById('tx-filter-obj')?.value) || 0;
@@ -764,11 +767,7 @@ function renderTxs() {
   }).join('');
 }
 
-// ── Render Objets & Stock ─────────────────────────────────────────────────────
 function renderObjets() {
-
-
-  // --- Cartes par objet ---
   const grid = document.getElementById('obj-cards');
   if (!db.objets.length) {
     grid.innerHTML = '<p style="color:var(--text3);font-family:var(--mono);font-size:13px">Aucun objet créé. Cliquez "+ Nouvel objet" pour commencer.</p>';
@@ -809,7 +808,7 @@ function renderObjets() {
       ${obj.pa ? `<div class="obj-stat"><span class="obj-stat-label">Prix achat réf.</span><span class="mono">${fmt(obj.pa)}</span></div>` : ''}
       ${obj.pv ? `<div class="obj-stat"><span class="obj-stat-label">Prix vente réf.</span><span class="mono">${fmt(obj.pv)}</span></div>` : ''}
       ${marge!==null ? `<div class="obj-stat"><span class="obj-stat-label">Marge réf.</span><span class="${marge>=0?'pos':'neg'}">${marge.toFixed(1)}%</span></div>` : ''}
-      ${valStock > 0 ? `<div class="obj-stat"><span class="obj-stat-label">Val. stock</span><span class="mono" style="color:var(--teal)">${fmt(valStock)}</span></div>` : ''}
+      ${valStock > 0 ? `<div class="obj-stat"><span class="obj-stat-label">Val. stock (PA)</span><span class="mono" style="color:var(--teal)">${fmt(valStock)}</span></div>` : ''}
       <div class="obj-net">
         <span class="obj-net-label">Profit / Perte</span>
         <span class="mono" style="font-size:16px;font-weight:700;color:${net>=0?'var(--green)':'var(--red)'}">${fmt(net)}</span>
@@ -829,7 +828,6 @@ function filterByObj(id) {
   renderTxs();
 }
 
-// ── Render clients ─────────────────────────────────────────────────────────────
 function renderClients() {
   const grid = document.getElementById('clients-grid');
   const q = (document.getElementById('client-search')?.value || '').trim().toLowerCase();
@@ -875,7 +873,6 @@ function renderClients() {
   }).join('');
 }
 
-// ── Render All ─────────────────────────────────────────────────────────────────
 function renderAll() {
   renderMetrics();
   renderTxs();
@@ -885,7 +882,6 @@ function renderAll() {
   updateDatalist();
 }
 
-// ── Modal Objet ────────────────────────────────────────────────────────────────
 function openObjModal(id) {
   modalObjId = id || null;
   if (id) {
@@ -942,7 +938,6 @@ function deleteObjFromModal() {
   toast('Objet supprimé.');
 }
 
-// ── Modal Client ───────────────────────────────────────────────────────────────
 function openClientModal(id) {
   modalClientId = id || null;
   if (id) {
@@ -996,12 +991,10 @@ function deleteClientFromModal() {
   toast('Client supprimé.');
 }
 
-// ── Reset ──────────────────────────────────────────────────────────────────────
 function openResetModal()  { document.getElementById('reset-modal-overlay').classList.add('open'); }
 function closeResetModal() { document.getElementById('reset-modal-overlay').classList.remove('open'); }
 function confirmReset() {
   db.txs = []; db.nextTxId = 1;
-  // Remettre stocks à 0
   db.objets.forEach(o => o.stock = 0);
   saveData(); renderAll(); closeResetModal();
   toast('Transactions effacées — stocks remis à zéro.');
