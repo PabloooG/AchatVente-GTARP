@@ -321,7 +321,7 @@ td{padding:10px 14px;vertical-align:middle}
           <tr>
             <th>Date</th><th>Type</th><th>Objet</th><th>Client</th><th>Description</th>
             <th style="text-align:right">Qté</th>
-            <th style="text-align:right">Montant</th>
+            <th style="text-align:right">Prix/unité</th>
             <th style="text-align:right">Profit/Perte</th>
             <th></th>
           </tr>
@@ -701,7 +701,6 @@ function renderMetrics() {
   const uv  = db.txs.filter(t=>t.type==='Vente').reduce((s,t)=>s+(t.units||0),0);
   const ua  = db.txs.filter(t=>t.type==='Achat').reduce((s,t)=>s+(t.units||0),0);
 
-  // Valeur du stock au prix d'achat de référence
   const valStockPA = db.objets.reduce((s,o) => s + (Math.max(0, o.stock||0) * (o.pa||0)), 0);
 
   const cashDisponible = db.balance + tv - ta;
@@ -760,7 +759,7 @@ function renderTxs() {
       <td style="font-weight:500">${c ? (c.nom || c.tel || '—') : '—'}</td>
       <td style="color:var(--text2);font-size:13px">${t.desc||'—'}</td>
       <td style="text-align:right" class="mono">${(t.units||1).toLocaleString('fr-CA')}</td>
-      <td style="text-align:right;font-weight:600" class="mono">${fmt(t.montant)}</td>
+      <td style="text-align:right;font-weight:600" class="mono">${fmt(t.prix)}</td>
       <td style="text-align:right" class="${pl>=0?'pos':'neg'}">${fmt(pl)}</td>
       <td style="text-align:center"><button class="btn-del" onclick="deleteTx(${t.id})" title="Supprimer">✕</button></td>
     </tr>`;
